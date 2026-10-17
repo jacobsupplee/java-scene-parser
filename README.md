@@ -1,47 +1,35 @@
-# Scene Definition Parser and Graphics Renderer
+# Java Scene Parser
 
-A Java desktop application that reads a text-based scene description, parses its syntax, constructs graphic objects, and renders the resulting scene in a Swing window.
+This project reads a scene description from a text file and uses it to draw shapes in a Java Swing window. The input describes the scene, and the lexer and parser turn that text into objects the program can render.
 
-The project demonstrates how a small domain-specific language can drive a graphical application: the input file describes a scene and its objects, while the lexer and parser interpret that description and create the corresponding shapes.
+## What it does
 
-## Capabilities
+- Reads scene definitions from text files
+- Breaks the input into tokens and checks that the syntax is valid
+- Reports lexical and syntax errors for invalid input
+- Creates and draws shapes in a Swing window
+- Supports rectangles, triangles, parallelograms, regular polygons, and text
+- Uses separate classes to represent the different scene objects
 
-- Read a scene definition from a selected file
-- Tokenize and parse structured scene syntax
-- Validate expected tokens and report lexical or syntax errors
-- Construct and render graphic objects in a Swing window
-- Support multiple shape types, including triangles, rectangles, parallelograms, regular polygons, and text
-- Represent scene elements with separate classes
-
-## Technology
+## Built with
 
 - Java
-- Java Swing and AWT
+- Swing and AWT
 - File I/O
 - Lexical analysis and parsing
-- Object-oriented design
-- Custom exceptions
+- Object-oriented programming
 
-## Run locally
+## How it works
 
-This repository is organized as a Java project and includes Eclipse project metadata. Open it in Eclipse as an existing project, ensure a compatible JDK is configured, compile the source files, and run the `Main` class. The application prompts for a scene file through a file chooser; sample `.txt` scene descriptions are included in the repository.
+1. The program loads a scene definition file.
+2. The lexer identifies the tokens in the input.
+3. The parser checks the structure and determines which objects to create.
+4. The application renders the resulting scene in a Swing window.
 
-If running outside Eclipse, compile all Java source files together and launch `Main` from the compiled output directory. Exact commands can vary by JDK version and project layout.
+## Running the project
 
-## Input and output
+The project includes Eclipse metadata, so the easiest way to run it is to import it into Eclipse as an existing Java project. Make sure a compatible JDK is configured, then run the `Main` class. The application lets you select a scene file, and sample `.txt` files are included to try different inputs.
 
-- **Input:** A text file describing the scene window and graphic objects
-- **Processing:** Lexer tokenizes the input; parser validates structure and creates shape instances
-- **Output:** A Swing window displaying the parsed scene
+## Notes
 
-## Engineering concepts demonstrated
-
-- Separating input parsing from rendering
-- Working with file-based structured input
-- Mapping tokens and grammar rules to application objects
-- Handling invalid input with explicit error types
-- Extending a parser to recognize additional shape definitions
-
-## Project context
-
-This repository originated as coursework and is presented as a technical project showcase. The parser and rendering workflow is the focus; it is not a production graphics editor.
+This project started as coursework for a Java programming class. I extended the parser to handle additional shapes, including isosceles triangles, parallelograms, regular polygons, and text. It gave me practical experience with parsing, input validation, and turning text-based input into a graphical output.
