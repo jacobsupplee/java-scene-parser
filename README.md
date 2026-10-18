@@ -20,22 +20,23 @@ A Java application that reads scene definitions from a text file, parses the inp
 
 ## Project Structure
 
-- Java source files are in the project root.
+- `src/` contains the Java source files.
 - `examples/` contains valid scene files you can open in the application.
 - `tests/invalid/` contains scene files that should be rejected by the parser.
-- `ParserTests.java` runs the example and invalid-input tests.
+- `ParserTests.java` is included in `src/` and runs the parser regression tests.
 
 ## Run
 
-Import the project into Eclipse as an existing Java project, configure a compatible JDK, and run the `Main` class. When prompted, choose a scene file from the `examples/` folder.
+Import the repository into Eclipse as an existing Java project. The project is configured to use `src/` for source files and `bin/` for compiled output. Run the `Main` class and choose a scene file from the `examples/` folder.
 
 ## Tests
 
 From the project root, compile the Java files and run the test suite:
 
 ```bash
-javac *.java
-java ParserTests
+mkdir -p bin
+javac -d bin src/*.java
+java -cp bin ParserTests
 ```
 
-The tests run without opening a Swing window. They check every scene file in `examples/`, verify that files in `tests/invalid/` are rejected, and test missing punctuation and invalid numbers. The runner reports a final pass/fail count.
+The tests run without opening a Swing window. They check every scene file in `examples/`, verify that files in `tests/invalid/` are rejected, and test missing punctuation and invalid numbers. Run the commands from the project root so the example files can be found.
