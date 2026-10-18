@@ -1,0 +1,9 @@
+//Jacob Supplee
+//CMSC 330 Advanced Programming Languages
+//September 6 2026
+
+//Test Case 2: testing Isosceles triangle generation
+
+Scene IsoscelesTest (500, 400)
+Isosceles Color (34, 139, 230) at (200, 80) Height 140 Width 180;
+End.
