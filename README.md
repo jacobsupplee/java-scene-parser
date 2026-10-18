@@ -31,7 +31,7 @@ Import the project into Eclipse as an existing Java project, configure a compati
 
 ## Tests
 
-The `ParserTests` class checks valid scene input and verifies that malformed input is rejected for missing punctuation and an invalid number.
+The `ParserTests` class automatically checks every `.txt` file in the project directory. Files beginning with `INVALID_` are expected to be rejected; all other scene files are expected to parse successfully. It also tests missing punctuation and invalid numbers using temporary files.
 
 From the project directory, compile the Java files and run the tests:
 
@@ -40,4 +40,4 @@ javac *.java
 java ParserTests
 ```
 
-The tests use temporary input files and run without opening a Swing window. A successful run ends with `All parser tests passed.`
+The tests run without opening a Swing window and report a final pass/fail count. Run them from the project directory so the sample `.txt` files can be found.
