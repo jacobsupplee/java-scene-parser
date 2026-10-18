@@ -20,7 +20,8 @@ class ParserTests {
     public static void main(String[] args) throws Exception {
         System.setProperty("java.awt.headless", "true");
 
-        testSceneFiles();
+        testSceneFiles(new File("examples"), false);
+        testSceneFiles(new File("tests/invalid"), true);
         testMissingPeriod();
         testInvalidNumber();
         testMissingSemicolon();
@@ -31,19 +32,17 @@ class ParserTests {
             throw new AssertionError("Some parser tests failed.");
     }
 
-    // Tests all included scene files; files starting with INVALID_ should be rejected
-    private static void testSceneFiles() {
-        File directory = new File(".");
+    // Tests scene files in the selected folder; invalid files should be rejected
+    private static void testSceneFiles(File directory, boolean shouldFail) {
         File[] sceneFiles = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
 
         if (sceneFiles == null || sceneFiles.length == 0) {
-            fail("scene files", "No .txt files found. Run tests from the project directory.");
+            fail(directory.getPath(), "No .txt files found. Run tests from the project directory.");
             return;
         }
 
         Arrays.sort(sceneFiles, Comparator.comparing(File::getName));
         for (File file : sceneFiles) {
-            boolean shouldFail = file.getName().startsWith("INVALID_");
             try {
                 Parser parser = new Parser(file);
                 parser.parseScene();
