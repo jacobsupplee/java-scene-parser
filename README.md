@@ -18,26 +18,24 @@ A Java application that reads scene definitions from a text file, parses the inp
 - Lexical analysis and parsing
 - Object-oriented programming
 
-## How It Works
+## Project Structure
 
-1. Load a scene definition file.
-2. The lexer identifies tokens in the input.
-3. The parser validates the structure and creates scene objects.
-4. Swing renders the scene in a window.
+- Java source files are in the project root.
+- `examples/` contains valid scene files you can open in the application.
+- `tests/invalid/` contains scene files that should be rejected by the parser.
+- `ParserTests.java` runs the example and invalid-input tests.
 
 ## Run
 
-Import the project into Eclipse as an existing Java project, configure a compatible JDK, and run the `Main` class. Use the included sample `.txt` files to try different scenes.
+Import the project into Eclipse as an existing Java project, configure a compatible JDK, and run the `Main` class. When prompted, choose a scene file from the `examples/` folder.
 
 ## Tests
 
-The `ParserTests` class automatically checks every `.txt` file in the project directory. Files beginning with `INVALID_` are expected to be rejected; all other scene files are expected to parse successfully. It also tests missing punctuation and invalid numbers using temporary files.
-
-From the project directory, compile the Java files and run the tests:
+From the project root, compile the Java files and run the test suite:
 
 ```bash
 javac *.java
 java ParserTests
 ```
 
-The tests run without opening a Swing window and report a final pass/fail count. Run them from the project directory so the sample `.txt` files can be found.
+The tests run without opening a Swing window. They check every scene file in `examples/`, verify that files in `tests/invalid/` are rejected, and test missing punctuation and invalid numbers. The runner reports a final pass/fail count.
