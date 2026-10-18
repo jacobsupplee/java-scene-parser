@@ -1,0 +1,5 @@
+//Jacob Supplee
+//Test Case 5 - Text and String Handling
+Scene TextTest (500, 350)
+Text Color (0, 0, 0) at (100, 150) "This is a test";
+End.
