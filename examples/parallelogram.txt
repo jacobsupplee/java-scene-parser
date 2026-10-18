@@ -1,0 +1,8 @@
+//Jacob Supplee
+//CMSC 330 Advanced Programming Languages
+//September 3 2026
+//Test Case 3
+
+Scene ParallelogramTest (500, 400)
+Parallelogram Color (70, 130, 180) at (120, 100) (340, 240) Offset 40;
+End.
