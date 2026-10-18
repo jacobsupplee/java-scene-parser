@@ -1,0 +1,5 @@
+//Jacob Supplee
+//Test Case 8 - Invalid Parallelogram
+Scene InvalidParallelogram (500, 400)
+Parallelogram Color (0, 0, 255) at (120, 100) (340, 240) Offset "thirty";
+End.
