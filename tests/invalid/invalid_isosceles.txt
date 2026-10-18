@@ -1,0 +1,6 @@
+//Jacob Supplee
+//CMSC 330 Advanced Programming Languages
+//Test Case 7 - wrong color construction
+Scene InvalidIsosceles (500, 400)
+Isosceles Color (red, blue, green) at (200, 100) Height 100 Width 180;
+End.
