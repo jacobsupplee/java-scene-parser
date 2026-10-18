@@ -1,0 +1,5 @@
+//Jacob Supplee
+//Test Case 10 - Invalid Scene Structure
+Scene InvalidStructure (300, 300)
+Rectangle Color (255, 0, 0) at (50, 50) Height 100 Width 100;
+End;
