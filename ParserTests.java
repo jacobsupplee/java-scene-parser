@@ -8,28 +8,60 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Comparator;
 
 // Runs parser tests without opening a scene window
 class ParserTests {
 
+    private static int passed = 0;
+    private static int failed = 0;
+
     public static void main(String[] args) throws Exception {
         System.setProperty("java.awt.headless", "true");
 
-        testValidScene();
+        testSceneFiles();
         testMissingPeriod();
         testInvalidNumber();
         testMissingSemicolon();
 
-        System.out.println("All parser tests passed.");
+        System.out.println();
+        System.out.println("Test results: " + passed + " passed, " + failed + " failed.");
+        if (failed > 0)
+            throw new AssertionError("Some parser tests failed.");
     }
 
-    // Tests a valid scene with one rectangle
-    private static void testValidScene() throws Exception {
-        String input = "Scene TestScene (300, 300)\n"
-                + "Rectangle Color (255, 0, 0) at (50, 50) Height 100 Width 100;\n"
-                + "End.\n";
+    // Tests all included scene files; files starting with INVALID_ should be rejected
+    private static void testSceneFiles() {
+        File directory = new File(".");
+        File[] sceneFiles = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
 
-        parseScene("valid scene", input);
+        if (sceneFiles == null || sceneFiles.length == 0) {
+            fail("scene files", "No .txt files found. Run tests from the project directory.");
+            return;
+        }
+
+        Arrays.sort(sceneFiles, Comparator.comparing(File::getName));
+        for (File file : sceneFiles) {
+            boolean shouldFail = file.getName().startsWith("INVALID_");
+            try {
+                Parser parser = new Parser(file);
+                parser.parseScene();
+                if (shouldFail)
+                    fail(file.getName(), "Expected invalid input to be rejected");
+                else
+                    pass(file.getName());
+            } catch (SyntaxError | LexicalError error) {
+                if (shouldFail)
+                    pass(file.getName() + " rejected");
+                else
+                    fail(file.getName(), error.getMessage());
+            } catch (IOException error) {
+                fail(file.getName(), "Could not read file: " + error.getMessage());
+            } catch (RuntimeException error) {
+                fail(file.getName(), "Unexpected error: " + error.getMessage());
+            }
+        }
     }
 
     // Tests that a scene without a final period is rejected
@@ -59,18 +91,6 @@ class ParserTests {
         expectSyntaxError("missing semicolon", input);
     }
 
-    // Parses valid input from a temporary file
-    private static void parseScene(String testName, String input) throws Exception {
-        File file = createInputFile(input);
-        try {
-            Parser parser = new Parser(file);
-            parser.parseScene();
-            System.out.println("PASS: " + testName);
-        } finally {
-            Files.deleteIfExists(file.toPath());
-        }
-    }
-
     // Checks that malformed input produces a syntax error
     private static void expectSyntaxError(String testName, String input) throws Exception {
         File file = createInputFile(input);
@@ -78,9 +98,11 @@ class ParserTests {
             Parser parser = new Parser(file);
             try {
                 parser.parseScene();
-                throw new AssertionError("FAIL: " + testName + " was accepted");
+                fail(testName, "Malformed input was accepted");
             } catch (SyntaxError error) {
-                System.out.println("PASS: " + testName + " was rejected");
+                pass(testName + " rejected");
+            } catch (LexicalError error) {
+                pass(testName + " rejected");
             }
         } finally {
             Files.deleteIfExists(file.toPath());
@@ -92,5 +114,17 @@ class ParserTests {
         Path file = Files.createTempFile("scene-parser-test-", ".txt");
         Files.write(file, input.getBytes(StandardCharsets.UTF_8));
         return file.toFile();
+    }
+
+    // Reports a successful test
+    private static void pass(String testName) {
+        passed++;
+        System.out.println("PASS: " + testName);
+    }
+
+    // Reports a failed test and continues with the remaining cases
+    private static void fail(String testName, String reason) {
+        failed++;
+        System.out.println("FAIL: " + testName + " - " + reason);
     }
 }
