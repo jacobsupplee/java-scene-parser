@@ -1,0 +1,5 @@
+//Jacob Supplee
+//Test Case 9 - Invalid Regular Polygon
+Scene InvalidRegularPolygon (500, 400)
+RegularPolygon Color (255, 0, 255) at (250, 200) Sides six Radius 80;
+End.
