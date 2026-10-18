@@ -1,0 +1,5 @@
+//Jacob Supplee
+//Test Case 4 - Regular Polygon
+Scene RegularPolygonTest (500, 450)
+RegularPolygon Color (255, 165, 0) at (250, 225) Sides 8 Radius 90;
+End.
