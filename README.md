@@ -28,3 +28,16 @@ A Java application that reads scene definitions from a text file, parses the inp
 ## Run
 
 Import the project into Eclipse as an existing Java project, configure a compatible JDK, and run the `Main` class. Use the included sample `.txt` files to try different scenes.
+
+## Tests
+
+The `ParserTests` class checks valid scene input and verifies that malformed input is rejected for missing punctuation and an invalid number.
+
+From the project directory, compile the Java files and run the tests:
+
+```bash
+javac *.java
+java ParserTests
+```
+
+The tests use temporary input files and run without opening a Swing window. A successful run ends with `All parser tests passed.`
