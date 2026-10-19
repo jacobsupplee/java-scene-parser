@@ -1,7 +1,6 @@
-// CMSC 330 Advanced Programming Languages
-// Project 1 - Parser and Display Program
+// Java Scene Parser
 // Jacob Supplee
-// September 2026
+// October 2026
 
 //Description: Defines regular polygon
 
