@@ -5,27 +5,24 @@
 
 import java.awt.*;
 
-// Abstract base class for all polygon classes
-
+// Abstract base class for polygon shapes.
 abstract class Polygon_ extends Image {
-
     private int vertexCount;
     private Polygon polygon;
-
-    // Constructor that initializes color and vertexCount of a polygon
 
     public Polygon_(Color color, int vertexCount) {
         super(color);
         this.vertexCount = vertexCount;
     }
 
-    // Creates a polygon object given its vertices
-
-    public void createPolygon(int[] x_points, int[] y_points) {
-        polygon = new Polygon(x_points, y_points, vertexCount);
+    public Polygon_(Color color, int vertexCount, boolean filled) {
+        super(color, filled);
+        this.vertexCount = vertexCount;
     }
 
-    // Draws polygon using polygon object
+    public void createPolygon(int[] xPoints, int[] yPoints) {
+        polygon = new Polygon(xPoints, yPoints, vertexCount);
+    }
 
     @Override
     public void draw(Graphics graphics) {
@@ -33,5 +30,12 @@ abstract class Polygon_ extends Image {
         drawPolygon(graphics, polygon);
     }
 
-    abstract public void drawPolygon(Graphics graphics, Polygon polygon);
+    // Uses the selected style regardless of the polygon's shape class.
+    public void drawPolygon(Graphics graphics, Polygon polygon) {
+        if (isFilled()) {
+            graphics.fillPolygon(polygon);
+        } else {
+            graphics.drawPolygon(polygon);
+        }
+    }
 }
