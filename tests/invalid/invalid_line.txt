@@ -1,0 +1,3 @@
+Scene InvalidLine (300, 300)
+    Line Color (255, 0, 0) at (40, 40) to;
+End.
