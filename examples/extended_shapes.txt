@@ -1,0 +1,7 @@
+Scene ExtendedShapes (600, 400)
+    Ellipse Color (167, 139, 250) at (40, 40) Width 140 Height 80 Filled;
+    Ellipse Color (45, 212, 191) at (220, 40) Width 140 Height 80 Outline;
+    Line Color (251, 146, 60) at (40, 170) to (200, 250);
+    RoundedRectangle Color (96, 165, 250) at (260, 160) Height 100 Width 180 Radius 18 Filled;
+    RoundedRectangle Color (244, 114, 182) at (260, 290) Height 70 Width 180 Radius 12 Outline;
+End.
