@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -25,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.DefaultListModel;
 
 // Interactive interface for building scene files and passing them through the existing parser.
@@ -47,33 +49,40 @@ class SceneBuilder extends JFrame {
     private final JTextField radius = new JTextField("60", 5);
     private final JTextField textValue = new JTextField("Hello World", 12);
 
-    private Color selectedColor = new Color(40, 130, 220);
-    private final JButton colorButton = new JButton("Choose color");
+    private Color selectedColor = new Color(167, 139, 250);
+    private final JButton colorButton = new JButton("Pick a color");
     private final DefaultListModel<String> objectListModel = new DefaultListModel<>();
     private final JList<String> objectList = new JList<>(objectListModel);
     private final ArrayList<String> sceneObjects = new ArrayList<>();
 
     public SceneBuilder() {
-        super("Java Scene Parser - Scene Builder");
+        super("Scene Studio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(12, 12));
+        setLayout(new BorderLayout(14, 14));
+        getContentPane().setBackground(new Color(17, 24, 39));
+        ((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(14, 14, 12, 14));
 
-        JPanel sceneSettings = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        sceneSettings.setBorder(BorderFactory.createTitledBorder("Scene settings"));
-        sceneSettings.add(new JLabel("Scene name"));
+        JPanel sceneSettings = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 10));
+        stylePanel(sceneSettings);
+        sceneSettings.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(55, 65, 81)), BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+        sceneSettings.add(new JLabel("SCENE"));
         sceneSettings.add(sceneName);
-        sceneSettings.add(new JLabel("Canvas width"));
+        sceneSettings.add(new JLabel("WIDTH"));
         sceneSettings.add(canvasWidth);
-        sceneSettings.add(new JLabel("Canvas height"));
+        sceneSettings.add(new JLabel("HEIGHT"));
         sceneSettings.add(canvasHeight);
         add(sceneSettings, BorderLayout.NORTH);
 
-        JPanel fields = new JPanel(new GridLayout(0, 4, 8, 6));
-        fields.setBorder(BorderFactory.createTitledBorder("Shape properties"));
-        fields.add(new JLabel("Shape"));
+        JPanel fields = new JPanel(new GridLayout(0, 4, 10, 10));
+        stylePanel(fields);
+        fields.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(55, 65, 81)), BorderFactory.createEmptyBorder(14, 14, 14, 14)));
+        fields.add(new JLabel("SHAPE"));
         fields.add(shapeChoice);
-        fields.add(new JLabel("Color"));
+        fields.add(new JLabel("COLOR"));
         colorButton.setBackground(selectedColor);
+        colorButton.setOpaque(true);
+        colorButton.setFocusPainted(false);
+        colorButton.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
         colorButton.setForeground(Color.WHITE);
         colorButton.addActionListener(event -> chooseColor());
         fields.add(colorButton);
@@ -88,7 +97,7 @@ class SceneBuilder extends JFrame {
         addField(fields, "Polygon radius", radius);
         addField(fields, "Text content", textValue);
 
-        JButton addShape = new JButton("Add shape");
+        JButton addShape = new JButton("+ Add shape");
         addShape.addActionListener(event -> addShape());
         fields.add(addShape);
         JButton removeShape = new JButton("Remove selected");
@@ -96,29 +105,66 @@ class SceneBuilder extends JFrame {
         fields.add(removeShape);
         add(fields, BorderLayout.CENTER);
 
-        JPanel objectPanel = new JPanel(new BorderLayout(6, 6));
-        objectPanel.setBorder(BorderFactory.createTitledBorder("Shapes in this scene"));
+        JPanel objectPanel = new JPanel(new BorderLayout(8, 8));
+        stylePanel(objectPanel);
+        objectPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(55, 65, 81)), BorderFactory.createEmptyBorder(12, 12, 12, 12)));
         objectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        objectList.setBackground(new Color(17, 24, 39));
+        objectList.setForeground(new Color(229, 231, 235));
+        objectList.setSelectionBackground(new Color(91, 70, 150));
+        objectList.setSelectionForeground(Color.WHITE);
+        objectList.setFixedCellHeight(34);
         objectPanel.add(new JScrollPane(objectList), BorderLayout.CENTER);
         JPanel actions = new JPanel(new GridLayout(0, 1, 4, 4));
-        JButton drawScene = new JButton("Draw scene");
+        JButton drawScene = new JButton("Render scene  →");
         drawScene.addActionListener(event -> drawScene());
         actions.add(drawScene);
-        JButton openScene = new JButton("Open existing scene...");
+        JButton openScene = new JButton("Load a .txt scene");
         openScene.addActionListener(event -> openExistingScene());
         actions.add(openScene);
         objectPanel.add(actions, BorderLayout.SOUTH);
         objectPanel.setPreferredSize(new java.awt.Dimension(260, 260));
         add(objectPanel, BorderLayout.EAST);
 
-        JLabel help = new JLabel("Add one or more shapes, then draw the scene. The existing lexer and parser validate the generated scene.");
+        JLabel help = new JLabel("Make something. Pick a shape, tweak the details, then render it.");
+        help.setForeground(new Color(156, 163, 175));
         help.setBorder(BorderFactory.createEmptyBorder(0, 10, 8, 10));
         add(help, BorderLayout.SOUTH);
 
         shapeChoice.addActionListener(event -> updateFieldAvailability());
         updateFieldAvailability();
-        setSize(1000, 520);
+        applyTheme();
+        setSize(1080, 650);
+        setMinimumSize(new java.awt.Dimension(900, 580));
         setLocationRelativeTo(null);
+    }
+
+    // Applies the app's dark palette and consistent typography.
+    private void applyTheme() {
+        UIManager.put("Panel.background", new Color(31, 41, 55));
+        UIManager.put("Label.foreground", new Color(229, 231, 235));
+        UIManager.put("TextField.background", new Color(17, 24, 39));
+        UIManager.put("TextField.foreground", new Color(243, 244, 246));
+        UIManager.put("TextField.caretForeground", new Color(243, 244, 246));
+        UIManager.put("TextField.selectionBackground", new Color(91, 70, 150));
+        UIManager.put("ComboBox.background", new Color(55, 65, 81));
+        UIManager.put("ComboBox.foreground", new Color(243, 244, 246));
+        UIManager.put("List.background", new Color(17, 24, 39));
+        UIManager.put("List.foreground", new Color(229, 231, 235));
+        UIManager.put("Button.background", new Color(55, 65, 81));
+        UIManager.put("Button.foreground", new Color(243, 244, 246));
+        UIManager.put("OptionPane.background", new Color(31, 41, 55));
+        UIManager.put("OptionPane.messageForeground", new Color(229, 231, 235));
+        UIManager.put("TitledBorder.titleColor", new Color(196, 181, 253));
+        Font font = new Font("Segoe UI", Font.PLAIN, 13);
+        UIManager.put("Label.font", font);
+        UIManager.put("Button.font", font);
+        UIManager.put("TextField.font", font);
+        UIManager.put("ComboBox.font", font);
+    }
+
+    private void stylePanel(JPanel panel) {
+        panel.setBackground(new Color(31, 41, 55));
     }
 
     // Adds a labeled field to the property grid.
@@ -129,7 +175,7 @@ class SceneBuilder extends JFrame {
 
     // Opens Swing's built-in color picker.
     private void chooseColor() {
-        Color chosen = JColorChooser.showDialog(this, "Choose shape color", selectedColor);
+        Color chosen = JColorChooser.showDialog(this, "Pick a color", selectedColor);
         if (chosen != null) {
             selectedColor = chosen;
             colorButton.setBackground(chosen);
@@ -179,7 +225,7 @@ class SceneBuilder extends JFrame {
             } else if ("RegularPolygon".equals(shape)) {
                 int sideCount = positiveInteger(sides, "Polygon sides");
                 if (sideCount < 3) {
-                    throw new IllegalArgumentException("A regular polygon must have at least 3 sides.");
+                    throw new IllegalArgumentException("A polygon needs at least 3 sides.");
                 }
                 int polygonRadius = positiveInteger(radius, "Polygon radius");
                 definition = shape + " " + color + " at (" + px + ", " + py + ") Sides " + sideCount
@@ -194,7 +240,7 @@ class SceneBuilder extends JFrame {
             sceneObjects.add(definition);
             objectListModel.addElement(summary);
         } catch (NumberFormatException error) {
-            showError("Enter whole numbers in the numeric fields.");
+            showError("Use whole numbers for the shape details.");
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());
         }
@@ -204,7 +250,7 @@ class SceneBuilder extends JFrame {
         try {
             return Integer.parseInt(field.getText().trim());
         } catch (NumberFormatException error) {
-            throw new IllegalArgumentException(label + " must be a whole number.");
+            throw new IllegalArgumentException(label + " needs to be a whole number.");
         }
     }
 
@@ -231,13 +277,13 @@ class SceneBuilder extends JFrame {
         try {
             String name = sceneName.getText().trim();
             if (name.isEmpty() || !name.matches("[A-Za-z][A-Za-z0-9_]*")) {
-                showError("Scene name must start with a letter and contain only letters, numbers, or underscores.");
+                showError("Give the scene a name that starts with a letter. Letters, numbers, and underscores work after that.");
                 return;
             }
             int w = positiveInteger(canvasWidth, "Canvas width");
             int h = positiveInteger(canvasHeight, "Canvas height");
             if (sceneObjects.isEmpty()) {
-                showError("Add at least one shape before drawing the scene.");
+                showError("Add a shape first, then render your scene.");
                 return;
             }
 
@@ -258,7 +304,7 @@ class SceneBuilder extends JFrame {
         } catch (SyntaxError | LexicalError error) {
             showError(error.getMessage());
         } catch (IOException error) {
-            showError("Could not create or read the scene file: " + error.getMessage());
+            showError("Couldn’t read the scene file: " + error.getMessage());
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());
         } finally {
@@ -286,12 +332,12 @@ class SceneBuilder extends JFrame {
         } catch (SyntaxError | LexicalError error) {
             showError(error.getMessage());
         } catch (IOException error) {
-            showError("Could not read the selected scene: " + error.getMessage());
+            showError("Couldn’t open that scene: " + error.getMessage());
         }
     }
 
     private void showError(String message) {
-        JOptionPane.showMessageDialog(this, message, "Scene Builder", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, message, "Quick fix", JOptionPane.ERROR_MESSAGE);
     }
 
     public static void main(String[] args) {
