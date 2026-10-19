@@ -1,0 +1,3 @@
+Scene InvalidEllipse (300, 300)
+    Ellipse Color (255, 0, 0) at (40, 40) Width 100 Filled;
+End.
