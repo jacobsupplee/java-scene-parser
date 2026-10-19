@@ -22,6 +22,13 @@ class DrawingPanel extends JPanel {
         images.add(image);
     }
 
+    // Updates the style on the most recently added shape.
+    public void setLastImageFilled(boolean filled) {
+        if (!images.isEmpty()) {
+            images.get(images.size() - 1).setFilled(filled);
+        }
+    }
+
     // Draws all the images on the drawing panel.
     @Override
     protected void paintComponent(Graphics graphics) {
