@@ -1,7 +1,7 @@
-// CMSC 330 Advanced Programming Languages
-// Project 1 - Parser and Display Program
+// Java Scene Parser
 // Jacob Supplee
-// September 2026
+// October 2026
+// Academic project for UMGC CMSC 330; based on course-provided skeleton.
 
 // Enumerated type that defines the list of tokens
 
