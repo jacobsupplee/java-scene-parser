@@ -1,18 +1,16 @@
 // Java Scene Parser
 // Jacob Supplee
 // October 2026
-// Defines solid polygons
 
 import java.awt.*;
 
+// Polygon class that defaults to fill mode for existing scene files.
 class SolidPolygon extends Polygon_ {
-    //Constructor that calls super constructor
     public SolidPolygon(Color color, int vertexCount) {
-        super(color, vertexCount);
+        super(color, vertexCount, true);
     }
-    //Draws solid polygon
-    @Override
-    public void drawPolygon(Graphics graphics, Polygon polygon) {
-        graphics.fillPolygon(polygon);
+
+    public SolidPolygon(Color color, int vertexCount, boolean filled) {
+        super(color, vertexCount, filled);
     }
 }
