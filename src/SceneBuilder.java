@@ -124,6 +124,10 @@ class SceneBuilder extends JFrame {
         add(help, BorderLayout.SOUTH);
 
         shapeChoice.addActionListener(event -> rebuildFields());
+        sceneName.addActionListener(event -> refreshSceneCode());
+        canvasWidth.addActionListener(event -> refreshSceneCode());
+        canvasHeight.addActionListener(event -> refreshSceneCode());
+        refreshSceneCode();
         setSize(1080, 650);
         setMinimumSize(new java.awt.Dimension(900, 580));
         setLocationRelativeTo(null);
@@ -277,6 +281,7 @@ class SceneBuilder extends JFrame {
             }
             sceneObjects.add(definition);
             objectListModel.addElement(summary);
+            refreshSceneCode();
         } catch (NumberFormatException error) {
             showError("Use whole numbers for the shape details.");
         } catch (IllegalArgumentException error) {
@@ -306,7 +311,22 @@ class SceneBuilder extends JFrame {
         if (selected >= 0) {
             objectListModel.remove(selected);
             sceneObjects.remove(selected);
+            refreshSceneCode();
         }
+    }
+
+    // Keeps the code tab synchronized with the current scene settings and shapes.
+    private void refreshSceneCode() {
+        StringBuilder source = new StringBuilder();
+        source.append("Scene ").append(sceneName.getText().trim()).append(" (")
+                .append(canvasWidth.getText().trim()).append(", ")
+                .append(canvasHeight.getText().trim()).append(")\n");
+        for (String object : sceneObjects) {
+            source.append("    ").append(object).append("\n");
+        }
+        source.append("End.\n");
+        scenePreview.setText(source.toString());
+        scenePreview.setCaretPosition(0);
     }
 
     // Writes the scene definition to a temporary file and reuses the existing parser to draw it.
