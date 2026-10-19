@@ -111,6 +111,29 @@ class Parser implements AutoCloseable {
             verifyNextToken(Token.NUMBER);
             radius = lexer.getNumber();
             scene.addImage(new Circle(color, point, radius, true));
+        } else if (imageToken == Token.ELLIPSE) {
+            verifyNextToken(Token.WIDTH);
+            verifyNextToken(Token.NUMBER);
+            width = lexer.getNumber();
+            verifyNextToken(Token.HEIGHT);
+            verifyNextToken(Token.NUMBER);
+            height = lexer.getNumber();
+            scene.addImage(new Ellipse(color, point, width, height, true));
+        } else if (imageToken == Token.ROUNDED_RECTANGLE) {
+            verifyNextToken(Token.HEIGHT);
+            verifyNextToken(Token.NUMBER);
+            height = lexer.getNumber();
+            verifyNextToken(Token.WIDTH);
+            verifyNextToken(Token.NUMBER);
+            width = lexer.getNumber();
+            verifyNextToken(Token.RADIUS);
+            verifyNextToken(Token.NUMBER);
+            radius = lexer.getNumber();
+            scene.addImage(new RoundedRectangle(color, point, height, width, radius, true));
+        } else if (imageToken == Token.LINE) {
+            verifyNextToken(Token.TO);
+            int[] endPoint = getNumberList(2);
+            scene.addImage(new Line(color, point, new Point(endPoint[0], endPoint[1])));
         } else if (imageToken == Token.TEXT) { //Added TEXT parser
             verifyNextToken(Token.STRING); //Parses text
             String textString = lexer.getLexeme();
