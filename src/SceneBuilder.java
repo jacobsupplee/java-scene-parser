@@ -25,6 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JTabbedPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.DefaultListModel;
@@ -124,9 +126,9 @@ class SceneBuilder extends JFrame {
         add(help, BorderLayout.SOUTH);
 
         shapeChoice.addActionListener(event -> rebuildFields());
-        sceneName.addActionListener(event -> refreshSceneCode());
-        canvasWidth.addActionListener(event -> refreshSceneCode());
-        canvasHeight.addActionListener(event -> refreshSceneCode());
+        addPreviewListener(sceneName);
+        addPreviewListener(canvasWidth);
+        addPreviewListener(canvasHeight);
         refreshSceneCode();
         setSize(1080, 650);
         setMinimumSize(new java.awt.Dimension(900, 580));
@@ -199,7 +201,7 @@ class SceneBuilder extends JFrame {
 
         if ("Text".equals(shape)) {
             addField(fields, "Text content", textValue);
-        } else {
+        } else if (!"Line".equals(shape)) {
             addField(fields, "Style", fillStyle);
         }
 
@@ -327,6 +329,26 @@ class SceneBuilder extends JFrame {
         source.append("End.\n");
         scenePreview.setText(source.toString());
         scenePreview.setCaretPosition(0);
+    }
+
+    // Updates the code preview as the scene name or canvas dimensions change.
+    private void addPreviewListener(JTextField field) {
+        field.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent event) {
+                refreshSceneCode();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent event) {
+                refreshSceneCode();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent event) {
+                refreshSceneCode();
+            }
+        });
     }
 
     // Saves the current scene definition as a reusable text file.
