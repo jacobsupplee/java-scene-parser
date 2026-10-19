@@ -329,6 +329,23 @@ class SceneBuilder extends JFrame {
         scenePreview.setCaretPosition(0);
     }
 
+    // Saves the current scene definition as a reusable text file.
+    private void saveScene() {
+        refreshSceneCode();
+        JFileChooser chooser = new JFileChooser(new File("."));
+        chooser.setSelectedFile(new File(sceneName.getText().trim() + ".txt"));
+        if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        try {
+            Files.write(chooser.getSelectedFile().toPath(),
+                    scenePreview.getText().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException error) {
+            showError("Couldn’t save that scene: " + error.getMessage());
+        }
+    }
+
     // Writes the scene definition to a temporary file and reuses the existing parser to draw it.
     private void drawScene() {
         File temporaryScene = null;
