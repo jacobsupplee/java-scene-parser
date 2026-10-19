@@ -7,8 +7,12 @@ import java.awt.*;
 class Parallelogram extends SolidPolygon {
     //Constructor that initializes vertices of parallelogram
     public Parallelogram(Color color, Point upperLeft, Point lowerRight, int offset) {
+        this(color, upperLeft, lowerRight, offset, true);
+    }
+
+    public Parallelogram(Color color, Point upperLeft, Point lowerRight, int offset, boolean filled) {
         //Creates a solid polygon w/ four vertices
-        super(color, 4);
+        super(color, 4, filled);
         //Calculates x coordinates of the four vertices
         int[] x_points = {
             upperLeft.x + offset,
