@@ -142,8 +142,8 @@ class SceneBuilder extends JFrame {
         panel.setBackground(new Color(31, 41, 55));
     }
 
-    // Adds a labeled field to the property grid.
-    private void addField(JPanel panel, String label, JTextField field) {
+    // Adds text fields and selectors to the property grid.
+    private void addField(JPanel panel, String label, java.awt.Component field) {
         panel.add(new JLabel(label));
         panel.add(field);
     }
