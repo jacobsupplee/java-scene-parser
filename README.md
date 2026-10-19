@@ -11,7 +11,7 @@ I built this project around a small scene-description language. Instead of drawi
 - Open existing scene-definition files
 - Lexical analysis and syntax validation for scene files
 - Clear errors for malformed input, unexpected characters, and invalid RGB color values
-- Drawing support for rectangles, right triangles, isosceles triangles, parallelograms, regular polygons, circles, and text
+- Drawing support for rectangles, right triangles, isosceles triangles, parallelograms, regular polygons, circles, ellipses, lines, rounded rectangles, and text
 - Filled or outline styles for geometric shapes
 - Separate classes for scene objects and drawing behavior
 - A regression test suite covering valid examples and malformed input
@@ -53,6 +53,9 @@ End.
 | Parallelogram | `Color (r, g, b) at (x1, y1) (x2, y2) Offset n;` |
 | Regular polygon | `Color (r, g, b) at (x, y) Sides n Radius r Filled;` |
 | Circle | `Color (r, g, b) at (x, y) Radius r Filled;` |
+| Ellipse | `Color (r, g, b) at (x, y) Width w Height h Filled;` |
+| Line | `Color (r, g, b) at (x1, y1) to (x2, y2);` |
+| Rounded rectangle | `Color (r, g, b) at (x, y) Height h Width w Radius r Filled;` |
 | Text | `Color (r, g, b) at (x, y) "your text";` |
 
 Coordinates are measured from the canvas's upper-left corner. RGB components must be integers from 0 through 255. Text content must be enclosed in double quotes. Shape keywords are recognized without regard to capitalization, and names such as `RightTriangle` and `RegularPolygon` are accepted without underscores.
@@ -65,14 +68,19 @@ This is a compact overview of the language recognized by the parser. The notatio
 scene          := "Scene" identifier number-list image-list "End" "."
 number-list    := "(" integer ("," integer)* ")"
 image-list     := (rectangle | right-triangle | isosceles | parallelogram
-                   | regular-polygon | text-image)*
+                   | regular-polygon | circle | ellipse | line | rounded-rectangle | text-image)*
 rectangle      := "Rectangle" color at-point dimensions ";"
 right-triangle := "RightTriangle" color at-point dimensions ";"
 isosceles      := "Isosceles" color at-point dimensions ";"
 parallelogram  := "Parallelogram" color point point "Offset" integer ";"
 regular-polygon:= "RegularPolygon" color at-point "Sides" integer
                    "Radius" integer ";"
+circle         := "Circle" color at-point "Radius" integer style ";"
+ellipse        := "Ellipse" color at-point "Width" integer "Height" integer style ";"
+line           := "Line" color at-point "to" point ";"
+rounded-rectangle := "RoundedRectangle" color at-point dimensions "Radius" integer style ";"
 text-image     := "Text" color at-point quoted-string ";"
+style          := "Filled" | "Outline"
 color          := "Color" "(" integer "," integer "," integer ")"
 at-point       := "at" point
 point          := "(" integer "," integer ")"
