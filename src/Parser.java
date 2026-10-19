@@ -1,8 +1,8 @@
 // Java Scene Parser
 // Jacob Supplee
 // October 2026
+// Academic project for UMGC CMSC 330; based on course-provided skeleton.
 
-//I have added four new parseImages methods: ISOSCELES, PARALLELOGRAM, REGULAR_POLYGON, and TEXT 
 import java.io.*;
 import java.awt.*;
 import java.util.*;
