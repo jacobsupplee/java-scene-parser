@@ -9,8 +9,12 @@ import java.awt.*;
 class RegularPolygon extends SolidPolygon {
     //Constructor that initializes vertices of a regular polygon
     public RegularPolygon(Color color, int sides, Point center, int radius) {
+        this(color, sides, center, radius, true);
+    }
+
+    public RegularPolygon(Color color, int sides, Point center, int radius, boolean filled) {
         //Creates a solid polygon with number of sides
-        super(color, sides);
+        super(color, sides, filled);
         //Creates arrays for vertex coordinates
         int[] x_points = new int[sides];
         int[] y_points = new int[sides];
