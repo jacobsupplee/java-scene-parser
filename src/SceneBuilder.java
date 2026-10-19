@@ -56,6 +56,7 @@ class SceneBuilder extends JFrame {
     private final JButton colorButton = new JButton("Pick a color");
     private final DefaultListModel<String> objectListModel = new DefaultListModel<>();
     private final JList<String> objectList = new JList<>(objectListModel);
+    private final JTextArea scenePreview = new JTextArea();
     private final ArrayList<String> sceneObjects = new ArrayList<>();
 
     public SceneBuilder() {
@@ -96,7 +97,13 @@ class SceneBuilder extends JFrame {
         objectList.setSelectionBackground(new Color(91, 70, 150));
         objectList.setSelectionForeground(Color.WHITE);
         objectList.setFixedCellHeight(34);
-        objectPanel.add(new JScrollPane(objectList), BorderLayout.CENTER);
+        scenePreview.setEditable(false);
+        scenePreview.setBackground(new Color(17, 24, 39));
+        scenePreview.setForeground(new Color(229, 231, 235));
+        JTabbedPane tabs = new JTabbedPane();
+        tabs.addTab("Objects", new JScrollPane(objectList));
+        tabs.addTab("Scene code", new JScrollPane(scenePreview));
+        objectPanel.add(tabs, BorderLayout.CENTER);
         JPanel actions = new JPanel(new GridLayout(0, 1, 4, 4));
         JButton drawScene = new JButton("Render scene  →");
         drawScene.addActionListener(event -> drawScene());
@@ -104,6 +111,9 @@ class SceneBuilder extends JFrame {
         JButton openScene = new JButton("Load a .txt scene");
         openScene.addActionListener(event -> openExistingScene());
         actions.add(openScene);
+        JButton saveScene = new JButton("Save scene as...");
+        saveScene.addActionListener(event -> saveScene());
+        actions.add(saveScene);
         objectPanel.add(actions, BorderLayout.SOUTH);
         objectPanel.setPreferredSize(new java.awt.Dimension(260, 260));
         add(objectPanel, BorderLayout.EAST);
