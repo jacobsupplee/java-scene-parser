@@ -5,20 +5,13 @@
 
 import java.awt.*;
 
-// Class that defines all hollow polygons
-
+// Polygon class that defaults to outline mode for existing scene files.
 class HollowPolygon extends Polygon_ {
-
-    // Constructor that calls super constructor
-
     public HollowPolygon(Color color, int vertexCount) {
-        super(color, vertexCount);
+        super(color, vertexCount, false);
     }
 
-    // Draws hollow polygon
-
-    @Override
-    public void drawPolygon(Graphics graphics, Polygon polygon) {
-        graphics.drawPolygon(polygon);
+    public HollowPolygon(Color color, int vertexCount, boolean filled) {
+        super(color, vertexCount, filled);
     }
 }
