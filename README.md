@@ -1,11 +1,14 @@
 # Java Scene Parser
 
-A Java application that reads scene definitions from a text file, checks the syntax with a lexer and parser, and draws the result in a Java Swing window.
+A Java Swing application for building geometric scenes through a graphical interface or loading scene definitions from text files. A lexer and parser validate the scene language before the shapes are rendered.
 
 I built this project around a small scene-description language. Instead of drawing each shape directly in Java code, you can describe a scene in a text file and let the parser turn it into a drawing.
 
 ## Features
 
+- Interactive Scene Builder with shape selection, RGB color picking, and shape-specific properties
+- Add and remove shapes before rendering a scene
+- Open existing scene-definition files
 - Lexical analysis and syntax validation for scene files
 - Clear errors for malformed input, unexpected characters, and invalid RGB color values
 - Drawing support for rectangles, right triangles, isosceles triangles, parallelograms, regular polygons, and text
@@ -22,7 +25,7 @@ I built this project around a small scene-description language. Instead of drawi
 
 ## Project Structure
 
-- `src/` — Java source files
+- `src/` — Java source files, including `SceneBuilder.java` for the interactive launcher
 - `examples/` — valid scene files demonstrating the supported shapes
 - `tests/invalid/` — scene files that should be rejected
 - `src/ParserTests.java` — regression tests for valid and invalid input
