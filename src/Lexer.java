@@ -1,7 +1,6 @@
-// CMSC 330 Advanced Programming Languages
-// Project 1 - Parser and Display Program
+// Java Scene Parser
 // Jacob Supplee
-// September 2026
+// October 2026
 
 import java.io.*;
 
@@ -45,7 +44,7 @@ class Lexer {
                     if (token == punctuation.charAt(i))
                         return punctuationTokens[i];
         }
-        return Token.EOF;
+        throw new LexicalError(tokenizer.lineno(), "Unexpected character '" + (char) token + "'");
     }
 
     // Closes the input file
