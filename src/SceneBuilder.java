@@ -317,7 +317,7 @@ class SceneBuilder extends JFrame {
 
         String definition = sceneObjects.get(selected);
         String shape = definition.substring(0, definition.indexOf(' '));
-        Matcher base = Pattern.compile("Color \\(\\((\\d+), (\\d+), (\\d+)\\)\\) at \\(\\((-?\\d+), (-?\\d+)\\)\\)").matcher(definition);
+        Matcher base = Pattern.compile("Color \\((\\d+), (\\d+), (\\d+)\\) at \\((-?\\d+), (-?\\d+)\\)").matcher(definition);
         if (!base.find()) {
             showError("I couldn’t load that shape into the editor.");
             return;
@@ -376,7 +376,7 @@ class SceneBuilder extends JFrame {
             if ("Text".equals(shape)) {
                 Matcher text = Pattern.compile("\\\"(.*)\\\";").matcher(definition);
                 if (text.find()) {
-                    textValue.setText(text.group(1).replace("\\\\" , "\\").replace("\\\" , "\\""));
+                    textValue.setText(text.group(1));
                 }
             }
 
