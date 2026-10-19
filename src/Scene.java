@@ -28,6 +28,11 @@ class Scene {
         drawing.addImage(image);
     }
 
+    // Applies a fill or outline choice to the most recently added shape.
+    public void setLastImageFilled(boolean filled) {
+        drawing.setLastImageFilled(filled);
+    }
+
     // Displays the scene when graphics are available.
     public void draw() {
         if (window != null) {
