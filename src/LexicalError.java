@@ -1,8 +1,7 @@
 // Java Scene Parser
 // Jacob Supplee
 // October 2026
-
-// Class that defines a lexical error
+// Academic project for UMGC CMSC 330; based on course-provided skeleton.
 
 class LexicalError extends Exception
 {
