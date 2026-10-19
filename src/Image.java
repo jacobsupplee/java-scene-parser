@@ -5,25 +5,27 @@
 
 import java.awt.*;
 
-// Abstract base class that defines all image objects
-
+// Shared color and fill style for drawable scene objects.
 abstract class Image {
-
     private Color color;
-
-    // Constructor that can only be called by the subclasses to initialize the color
+    private boolean filled;
 
     public Image(Color color) {
-        this.color = color;
+        this(color, true);
     }
 
-    // Sets the color of the image to be drawn. Must be called first by the draw function of the subclasses
+    public Image(Color color, boolean filled) {
+        this.color = color;
+        this.filled = filled;
+    }
 
     public void colorDrawing(Graphics graphics) {
         graphics.setColor(color);
     }
 
+    public boolean isFilled() {
+        return filled;
+    }
+
     abstract void draw(Graphics graphics);
 }
-
-
