@@ -54,7 +54,7 @@ class SceneBuilder extends JFrame {
     private final JTextField cornerRadius = new JTextField("18", 5);
     private final JComboBox<String> fillStyle = new JComboBox<>(new String[] {"Filled", "Outline"});
     private final JTextField textValue = new JTextField("Hello World", 12);
-    private final JPanel fields = new JPanel(new GridLayout(0, 2, 10, 8));
+    private final JPanel fields = new JPanel();
 
     private Color selectedColor = new Color(167, 139, 250);
     private final JButton colorButton = new JButton("Pick a color");
@@ -84,6 +84,7 @@ class SceneBuilder extends JFrame {
         add(sceneSettings, BorderLayout.NORTH);
 
         stylePanel(fields);
+        fields.setLayout(new javax.swing.BoxLayout(fields, javax.swing.BoxLayout.Y_AXIS));
         fields.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(55, 65, 81)), BorderFactory.createEmptyBorder(14, 14, 14, 14)));
         colorButton.setBackground(selectedColor);
         colorButton.setOpaque(true);
@@ -145,8 +146,21 @@ class SceneBuilder extends JFrame {
 
     // Adds text fields and selectors to the property grid.
     private void addField(JPanel panel, String label, java.awt.Component field) {
-        panel.add(new JLabel(label));
-        panel.add(field);
+        JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 5));
+        row.setBackground(new Color(31, 41, 55));
+        JLabel fieldLabel = new JLabel(label);
+        fieldLabel.setPreferredSize(new java.awt.Dimension(125, 26));
+        if (field instanceof JTextField) {
+            field.setPreferredSize(new java.awt.Dimension(180, 30));
+        } else if (field instanceof JComboBox<?>) {
+            field.setPreferredSize(new java.awt.Dimension(180, 32));
+        } else if (field == colorButton) {
+            field.setPreferredSize(new java.awt.Dimension(220, 42));
+        }
+        row.add(fieldLabel);
+        row.add(field);
+        row.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+        panel.add(row);
     }
 
     // Opens Swing's built-in color picker.
@@ -164,10 +178,8 @@ class SceneBuilder extends JFrame {
     private void rebuildFields() {
         String shape = (String) shapeChoice.getSelectedItem();
         fields.removeAll();
-        fields.add(new JLabel("SHAPE"));
-        fields.add(shapeChoice);
-        fields.add(new JLabel("COLOR"));
-        fields.add(colorButton);
+        addField(fields, "SHAPE", shapeChoice);
+        addField(fields, "COLOR", colorButton);
 
         addField(fields, "X", x);
         addField(fields, "Y", y);
@@ -211,15 +223,22 @@ class SceneBuilder extends JFrame {
 
         addShapeButton = new JButton(editingIndex >= 0 ? "Update selected" : "+ Add shape");
         addShapeButton.addActionListener(event -> addShape());
-        fields.add(addShapeButton);
+        JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8));
+        buttonRow.setBackground(new Color(31, 41, 55));
+        addShapeButton.setPreferredSize(new java.awt.Dimension(150, 34));
+        buttonRow.add(addShapeButton);
 
         JButton editShape = new JButton("Edit selected");
+        editShape.setPreferredSize(new java.awt.Dimension(150, 34));
         editShape.addActionListener(event -> editSelectedShape());
-        fields.add(editShape);
+        buttonRow.add(editShape);
 
         JButton removeShape = new JButton("Remove selected");
+        removeShape.setPreferredSize(new java.awt.Dimension(150, 34));
         removeShape.addActionListener(event -> removeSelectedShape());
-        fields.add(removeShape);
+        buttonRow.add(removeShape);
+        buttonRow.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+        fields.add(buttonRow);
 
         fields.revalidate();
         fields.repaint();
