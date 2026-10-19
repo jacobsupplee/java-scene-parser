@@ -8,9 +8,13 @@ import java.awt.*;
 class IsoscelesTriangle extends SolidPolygon {
     //Constructor that initializes vertices of the isosceles triangle
     public IsoscelesTriangle(Color color, Point topVertex, int height, int width) {
+        this(color, topVertex, height, width, true);
+    }
+
+    public IsoscelesTriangle(Color color, Point topVertex, int height, int width, boolean filled) {
 
         //Creates a solid polygon w/ three vertices
-        super(color, 3);
+        super(color, 3, filled);
 
         //Calculates x coordinates of the three vertices
         int[] x_points = {
