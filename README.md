@@ -73,7 +73,7 @@ image-list     := (rectangle | right-triangle | isosceles | parallelogram
 rectangle      := "Rectangle" color at-point dimensions style? ";"
 right-triangle := "RightTriangle" color at-point dimensions style? ";"
 isosceles      := "Isosceles" color at-point dimensions style? ";"
-parallelogram  := "Parallelogram" point point "Offset" integer style? ";"
+parallelogram  := "Parallelogram" color at-point point "Offset" integer style? ";"
 regular-polygon:= "RegularPolygon" color at-point "Sides" integer
                    "Radius" integer style? ";"
 circle         := "Circle" color at-point "Radius" integer style? ";"
