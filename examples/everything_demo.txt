@@ -1,0 +1,16 @@
+Scene EverythingDemo (900, 650)
+    Rectangle Color (167, 139, 250) at (40, 40) Height 100 Width 150 Filled;
+    Rectangle Color (45, 212, 191) at (210, 40) Height 100 Width 150 Outline;
+    RightTriangle Color (251, 146, 60) at (400, 40) Height 100 Width 120 Filled;
+    Isosceles Color (96, 165, 250) at (560, 40) Height 110 Width 130 Outline;
+    Parallelogram Color (244, 114, 182) at (40, 210) (190, 310) Offset 35 Filled;
+    RegularPolygon Color (250, 204, 21) at (300, 250) Sides 6 Radius 60 Filled;
+    Circle Color (52, 211, 153) at (470, 220) Radius 55 Filled;
+    Circle Color (248, 113, 113) at (600, 220) Radius 55 Outline;
+    Ellipse Color (129, 140, 248) at (700, 205) Width 150 Height 80 Filled;
+    Ellipse Color (34, 211, 238) at (700, 310) Width 150 Height 80 Outline;
+    Line Color (255, 255, 255) at (40, 390) to (240, 470);
+    RoundedRectangle Color (251, 146, 60) at (290, 390) Height 90 Width 170 Radius 18 Filled;
+    RoundedRectangle Color (45, 212, 191) at (500, 390) Height 90 Width 170 Radius 18 Outline;
+    Text Color (255, 255, 255) at (40, 540) "Scene Studio: every shape in one file";
+End.
