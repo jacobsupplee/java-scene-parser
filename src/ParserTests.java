@@ -43,8 +43,7 @@ class ParserTests {
 
         Arrays.sort(sceneFiles, Comparator.comparing(File::getName));
         for (File file : sceneFiles) {
-            try {
-                Parser parser = new Parser(file);
+            try (Parser parser = new Parser(file)) {
                 parser.parseScene();
                 if (shouldFail)
                     fail(file.getName(), "Expected invalid input to be rejected");
@@ -94,14 +93,15 @@ class ParserTests {
     private static void expectSyntaxError(String testName, String input) throws Exception {
         File file = createInputFile(input);
         try {
-            Parser parser = new Parser(file);
-            try {
-                parser.parseScene();
-                fail(testName, "Malformed input was accepted");
-            } catch (SyntaxError error) {
-                pass(testName + " rejected");
-            } catch (LexicalError error) {
-                pass(testName + " rejected");
+            try (Parser parser = new Parser(file)) {
+                try {
+                    parser.parseScene();
+                    fail(testName, "Malformed input was accepted");
+                } catch (SyntaxError error) {
+                    pass(testName + " rejected");
+                } catch (LexicalError error) {
+                    pass(testName + " rejected");
+                }
             }
         } finally {
             Files.deleteIfExists(file.toPath());
