@@ -1,6 +1,7 @@
 // Java Scene Parser
 // Jacob Supplee
 // October 2026
+// Defines an isosceles triangle
 
 import java.awt.*;
 
