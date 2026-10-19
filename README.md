@@ -11,7 +11,8 @@ I built this project around a small scene-description language. Instead of drawi
 - Open existing scene-definition files
 - Lexical analysis and syntax validation for scene files
 - Clear errors for malformed input, unexpected characters, and invalid RGB color values
-- Drawing support for rectangles, right triangles, isosceles triangles, parallelograms, regular polygons, and text
+- Drawing support for rectangles, right triangles, isosceles triangles, parallelograms, regular polygons, circles, and text
+- Filled or outline styles for geometric shapes
 - Separate classes for scene objects and drawing behavior
 - A regression test suite covering valid examples and malformed input
 
@@ -50,7 +51,8 @@ End.
 | Right triangle | `Color (r, g, b) at (x, y) Height h Width w;` |
 | Isosceles triangle | `Color (r, g, b) at (x, y) Height h Width w;` |
 | Parallelogram | `Color (r, g, b) at (x1, y1) (x2, y2) Offset n;` |
-| Regular polygon | `Color (r, g, b) at (x, y) Sides n Radius r;` |
+| Regular polygon | `Color (r, g, b) at (x, y) Sides n Radius r Filled;` |
+| Circle | `Color (r, g, b) at (x, y) Radius r Filled;` |
 | Text | `Color (r, g, b) at (x, y) "your text";` |
 
 Coordinates are measured from the canvas's upper-left corner. RGB components must be integers from 0 through 255. Text content must be enclosed in double quotes. Shape keywords are recognized without regard to capitalization, and names such as `RightTriangle` and `RegularPolygon` are accepted without underscores.
@@ -81,7 +83,7 @@ dimensions     := "Height" integer "Width" integer
 
 1. Clone or download the repository.
 2. Import it into Eclipse as an existing Java project.
-3. Run `Main` to open Scene Studio. Pick a shape, tweak its details and color, then hit **Render scene**. Use **Load a .txt scene** to open one of the examples.
+3. Run `Main` to open Scene Studio. Pick a shape, tweak its details and color, then hit **Render scene**. Use **Load a .txt scene** to open one of the examples. Geometric shapes can be filled or outline-only, and circles have their own shape option.
 
 The project is configured to use `src/` for source files and `bin/` for compiled output. The file chooser starts in the project working directory, so choosing an example from `examples/` is the simplest way to try it.
 
