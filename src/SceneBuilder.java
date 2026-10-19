@@ -33,7 +33,7 @@ class SceneBuilder extends JFrame {
     private final JTextField canvasWidth = new JTextField("500", 5);
     private final JTextField canvasHeight = new JTextField("500", 5);
     private final JComboBox<String> shapeChoice = new JComboBox<>(new String[] {
-        "Rectangle", "RightTriangle", "Isosceles", "Parallelogram", "RegularPolygon", "Circle", "Text"
+        "Rectangle", "RightTriangle", "Isosceles", "Parallelogram", "RegularPolygon", "Circle", "Ellipse", "Line", "RoundedRectangle", "Text"
     });
 
     private final JTextField x = new JTextField("50", 5);
@@ -45,6 +45,7 @@ class SceneBuilder extends JFrame {
     private final JTextField offset = new JTextField("25", 5);
     private final JTextField sides = new JTextField("6", 5);
     private final JTextField radius = new JTextField("60", 5);
+    private final JTextField cornerRadius = new JTextField("18", 5);
     private final JComboBox<String> fillStyle = new JComboBox<>(new String[] {"Filled", "Outline"});
     private final JTextField textValue = new JTextField("Hello World", 12);
     private final JPanel fields = new JPanel(new GridLayout(0, 4, 10, 10));
@@ -149,14 +150,27 @@ class SceneBuilder extends JFrame {
         addField(fields, "X", x);
         addField(fields, "Y", y);
 
-        if ("Rectangle".equals(shape) || "RightTriangle".equals(shape) || "Isosceles".equals(shape)) {
+        if ("Rectangle".equals(shape) || "RightTriangle".equals(shape) || "Isosceles".equals(shape)
+                || "RoundedRectangle".equals(shape)) {
             addField(fields, "Height", height);
             addField(fields, "Width", width);
         }
 
-        if ("Parallelogram".equals(shape)) {
+        if ("Ellipse".equals(shape)) {
+            addField(fields, "Width", width);
+            addField(fields, "Height", height);
+        }
+
+        if ("Line".equals(shape) || "Parallelogram".equals(shape)) {
             addField(fields, "Second point X", x2);
             addField(fields, "Second point Y", y2);
+        }
+
+        if ("RoundedRectangle".equals(shape)) {
+            addField(fields, "Corner radius", cornerRadius);
+        }
+
+        if ("Parallelogram".equals(shape)) {
             addField(fields, "Offset", offset);
         }
 
@@ -196,11 +210,28 @@ class SceneBuilder extends JFrame {
 
             String definition;
             String summary;
-            if ("Rectangle".equals(shape) || "RightTriangle".equals(shape) || "Isosceles".equals(shape)) {
+            if ("Rectangle".equals(shape) || "RightTriangle".equals(shape) || "Isosceles".equals(shape)
+                    || "RoundedRectangle".equals(shape)) {
                 int h = positiveInteger(height, "Height");
                 int w = positiveInteger(width, "Width");
-                definition = shape + " " + color + " at (" + px + ", " + py + ") Height " + h + " Width " + w + ";";
+                if ("RoundedRectangle".equals(shape)) {
+                    int corner = positiveInteger(cornerRadius, "Corner radius");
+                    definition = shape + " " + color + " at (" + px + ", " + py + ") Height " + h
+                            + " Width " + w + " Radius " + corner + ";";
+                } else {
+                    definition = shape + " " + color + " at (" + px + ", " + py + ") Height " + h + " Width " + w + ";";
+                }
                 summary = shape + " at (" + px + ", " + py + ") - " + w + " x " + h;
+            } else if ("Ellipse".equals(shape)) {
+                int w = positiveInteger(width, "Width");
+                int h = positiveInteger(height, "Height");
+                definition = shape + " " + color + " at (" + px + ", " + py + ") Width " + w + " Height " + h + ";";
+                summary = "Ellipse at (" + px + ", " + py + ") - " + w + " x " + h;
+            } else if ("Line".equals(shape)) {
+                int px2 = readInteger(x2, "Second point X");
+                int py2 = readInteger(y2, "Second point Y");
+                definition = shape + " " + color + " at (" + px + ", " + py + ") to (" + px2 + ", " + py2 + ");";
+                summary = "Line from (" + px + ", " + py + ") to (" + px2 + ", " + py2 + ")";
             } else if ("Parallelogram".equals(shape)) {
                 int px2 = readInteger(x2, "Second point X");
                 int py2 = readInteger(y2, "Second point Y");
@@ -227,7 +258,7 @@ class SceneBuilder extends JFrame {
                 summary = "Text at (" + px + ", " + py + "): " + textValue.getText();
             }
 
-            if (!"Text".equals(shape)) {
+            if (!"Text".equals(shape) && !"Line".equals(shape)) {
                 String style = (String) fillStyle.getSelectedItem();
                 definition = definition.substring(0, definition.length() - 1) + " " + style + ";";
                 summary += " - " + style.toLowerCase();
