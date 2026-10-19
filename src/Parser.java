@@ -10,7 +10,7 @@ import java.util.*;
 import javax.swing.*;
 // This class provides the skeleton parser for project 1
 
-class Parser {
+class Parser implements AutoCloseable {
     private JFrame window;
     private Token token;
     private Lexer lexer;
@@ -19,6 +19,12 @@ class Parser {
 
     public Parser(File file) throws IOException {
         lexer = new Lexer(file);
+    }
+
+    // Closes the parser input file
+    @Override
+    public void close() throws IOException {
+        lexer.close();
     }
 
     // Parses the production
