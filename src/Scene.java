@@ -1,7 +1,7 @@
-// CMSC 330 Advanced Programming Languages
-// Project 1 Skeleton
-// UMGC CITE
-// August 2021
+// Java Scene Parser
+// Jacob Supplee
+// October 2026
+// Academic project for UMGC CMSC 330; based on course-provided skeleton.
 
 import java.awt.GraphicsEnvironment;
 import javax.swing.*;
