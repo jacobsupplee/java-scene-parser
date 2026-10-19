@@ -1,7 +1,6 @@
-// CMSC 330 Advanced Programming Languages
-// Project 1 - Parser and Display Program
+// Java Scene Parser
 // Jacob Supplee
-// September 2026
+// October 2026
 
 //I have added four new parseImages methods: ISOSCELES, PARALLELOGRAM, REGULAR_POLYGON, and TEXT 
 import java.io.*;
@@ -38,6 +37,8 @@ class Parser implements AutoCloseable {
         Scene scene = new Scene(window, dimensions[0], dimensions[1]);
         parseImages(scene, lexer.getNextToken());
         verifyNextToken(Token.PERIOD);
+        token = lexer.getNextToken();
+        verifyCurrentToken(Token.EOF);
         return scene;
     }
 
@@ -52,7 +53,12 @@ class Parser implements AutoCloseable {
         int height, width, offset, radius;
         verifyNextToken(Token.COLOR);
         int[] colors = getNumberList(3);
-        Color color = new Color(colors[0], colors[1], colors[2]);
+        Color color;
+        try {
+            color = new Color(colors[0], colors[1], colors[2]);
+        } catch (IllegalArgumentException error) {
+            throw new SyntaxError(lexer.getLineNo(), "Color values must be between 0 and 255");
+        }
         verifyNextToken(Token.AT);
         int[] location = getNumberList(2);
         Point point = new Point(location[0], location[1]);
