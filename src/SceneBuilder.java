@@ -33,7 +33,7 @@ class SceneBuilder extends JFrame {
     private final JTextField canvasWidth = new JTextField("500", 5);
     private final JTextField canvasHeight = new JTextField("500", 5);
     private final JComboBox<String> shapeChoice = new JComboBox<>(new String[] {
-        "Rectangle", "RightTriangle", "Isosceles", "Parallelogram", "RegularPolygon", "Text"
+        "Rectangle", "RightTriangle", "Isosceles", "Parallelogram", "RegularPolygon", "Circle", "Text"
     });
 
     private final JTextField x = new JTextField("50", 5);
@@ -45,6 +45,7 @@ class SceneBuilder extends JFrame {
     private final JTextField offset = new JTextField("25", 5);
     private final JTextField sides = new JTextField("6", 5);
     private final JTextField radius = new JTextField("60", 5);
+    private final JComboBox<String> fillStyle = new JComboBox<>(new String[] {"Filled", "Outline"});
     private final JTextField textValue = new JTextField("Hello World", 12);
 
     private Color selectedColor = new Color(167, 139, 250);
@@ -93,6 +94,7 @@ class SceneBuilder extends JFrame {
         addField(fields, "Offset", offset);
         addField(fields, "Polygon sides", sides);
         addField(fields, "Polygon radius", radius);
+        addField(fields, "Style", fillStyle);
         addField(fields, "Text content", textValue);
 
         JButton addShape = new JButton("+ Add shape");
@@ -168,7 +170,8 @@ class SceneBuilder extends JFrame {
         y2.setEnabled("Parallelogram".equals(shape));
         offset.setEnabled("Parallelogram".equals(shape));
         sides.setEnabled("RegularPolygon".equals(shape));
-        radius.setEnabled("RegularPolygon".equals(shape));
+        radius.setEnabled("RegularPolygon".equals(shape) || "Circle".equals(shape));
+        fillStyle.setEnabled(!"Text".equals(shape));
         textValue.setEnabled("Text".equals(shape));
     }
 
@@ -195,6 +198,10 @@ class SceneBuilder extends JFrame {
                 definition = shape + " " + color + " at (" + px + ", " + py + ") (" + px2 + ", " + py2
                         + ") Offset " + shift + ";";
                 summary = shape + " from (" + px + ", " + py + ") to (" + px2 + ", " + py2 + ")";
+            } else if ("Circle".equals(shape)) {
+                int circleRadius = positiveInteger(radius, "Circle radius");
+                definition = shape + " " + color + " at (" + px + ", " + py + ") Radius " + circleRadius + ";";
+                summary = "Circle at (" + px + ", " + py + ") - radius " + circleRadius;
             } else if ("RegularPolygon".equals(shape)) {
                 int sideCount = positiveInteger(sides, "Polygon sides");
                 if (sideCount < 3) {
@@ -210,6 +217,11 @@ class SceneBuilder extends JFrame {
                 summary = "Text at (" + px + ", " + py + "): " + textValue.getText();
             }
 
+            if (!"Text".equals(shape)) {
+                String style = (String) fillStyle.getSelectedItem();
+                definition = definition.substring(0, definition.length() - 1) + " " + style + ";";
+                summary += " - " + style.toLowerCase();
+            }
             sceneObjects.add(definition);
             objectListModel.addElement(summary);
         } catch (NumberFormatException error) {
