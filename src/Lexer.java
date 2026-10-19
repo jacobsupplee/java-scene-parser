@@ -9,6 +9,7 @@ import java.io.*;
 
 class Lexer {
 
+    private FileReader reader;
     private StreamTokenizer tokenizer;
     private String punctuation = ",;.()";
     private Token[] punctuationTokens = {Token.COMMA, Token.SEMICOLON, Token.PERIOD, Token.LEFT_PAREN, Token.RIGHT_PAREN };
@@ -16,7 +17,8 @@ class Lexer {
     // Constructor that creates a lexical analyzer object given the source file
 
     public Lexer(File file) throws FileNotFoundException {
-        tokenizer = new StreamTokenizer(new FileReader(file));
+        reader = new FileReader(file);
+        tokenizer = new StreamTokenizer(reader);
         tokenizer.ordinaryChar('.');
         tokenizer.quoteChar('"');
     }
@@ -44,6 +46,11 @@ class Lexer {
                         return punctuationTokens[i];
         }
         return Token.EOF;
+    }
+
+    // Closes the input file
+    public void close() throws IOException {
+        reader.close();
     }
 
     // Returns the lexeme associated with the current token
