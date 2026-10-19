@@ -27,5 +27,9 @@ abstract class Image {
         return filled;
     }
 
+    public void setFilled(boolean filled) {
+        this.filled = filled;
+    }
+
     abstract void draw(Graphics graphics);
 }
