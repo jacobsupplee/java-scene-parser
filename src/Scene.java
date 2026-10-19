@@ -10,22 +10,25 @@ import javax.swing.*;
 class Scene {
     private JFrame window;
     private DrawingPanel drawing;
-    // Constructor that initializes scene and creates window when graphics are available
-    public Scene(String name, int height, int width) {
+
+    // Creates a drawing panel and window using the requested canvas dimensions.
+    public Scene(String name, int width, int height) {
         drawing = new DrawingPanel();
-        //Allows parser tests to run w/o opening a window
+        // Allows parser tests to run without opening a window.
         if (!GraphicsEnvironment.isHeadless()) {
             window = new JFrame(name);
             window.setSize(width, height);
-            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             window.add(drawing);
         }
     }
-    // Adds a graphic object to scene's drawing panel
+
+    // Adds a graphic object to the scene's drawing panel.
     public void addImage(Image image) {
         drawing.addImage(image);
     }
-    // Displays scene when graphics are available
+
+    // Displays the scene when graphics are available.
     public void draw() {
         if (window != null) {
             window.setVisible(true);
