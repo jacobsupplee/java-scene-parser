@@ -25,6 +25,9 @@ class ParserTests {
         testInvalidNumber();
         testMissingSemicolon();
         testUnexpectedCharacter();
+        testInvalidColor();
+        testMissingWidth();
+        testTrailingInput();
 
         System.out.println();
         System.out.println("Test results: " + passed + " passed, " + failed + " failed.");
@@ -106,6 +109,33 @@ class ParserTests {
         } finally {
             Files.deleteIfExists(file.toPath());
         }
+    }
+
+    // Tests that RGB values outside the supported range are rejected
+    private static void testInvalidColor() throws Exception {
+        String input = "Scene TestScene (300, 300)\n"
+                + "Rectangle Color (300, 0, 0) at (50, 50) Height 100 Width 100;\n"
+                + "End.\n";
+
+        expectSyntaxError("invalid color", input);
+    }
+
+    // Tests that a rectangle without a width is rejected
+    private static void testMissingWidth() throws Exception {
+        String input = "Scene TestScene (300, 300)\n"
+                + "Rectangle Color (255, 0, 0) at (50, 50) Height 100;\n"
+                + "End.\n";
+
+        expectSyntaxError("missing width", input);
+    }
+
+    // Tests that input after the final period is rejected
+    private static void testTrailingInput() throws Exception {
+        String input = "Scene TestScene (300, 300)\n"
+                + "Rectangle Color (255, 0, 0) at (50, 50) Height 100 Width 100;\n"
+                + "End. extra\n";
+
+        expectSyntaxError("trailing input", input);
     }
 
     // Checks that malformed input produces a syntax error
