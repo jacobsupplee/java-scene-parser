@@ -112,6 +112,9 @@ class SceneBuilder extends JFrame {
         tabs.addTab("Scene code", new JScrollPane(scenePreview));
         objectPanel.add(tabs, BorderLayout.CENTER);
         JPanel actions = new JPanel(new GridLayout(0, 1, 4, 4));
+        JButton editShape = new JButton("Edit selected");
+        editShape.addActionListener(event -> editSelectedShape());
+        actions.add(editShape);
         JButton drawScene = new JButton("Render scene  →");
         drawScene.addActionListener(event -> drawScene());
         actions.add(drawScene);
@@ -227,11 +230,6 @@ class SceneBuilder extends JFrame {
         buttonRow.setBackground(new Color(31, 41, 55));
         addShapeButton.setPreferredSize(new java.awt.Dimension(150, 34));
         buttonRow.add(addShapeButton);
-
-        JButton editShape = new JButton("Edit selected");
-        editShape.setPreferredSize(new java.awt.Dimension(150, 34));
-        editShape.addActionListener(event -> editSelectedShape());
-        buttonRow.add(editShape);
 
         JButton removeShape = new JButton("Remove selected");
         removeShape.setPreferredSize(new java.awt.Dimension(150, 34));
