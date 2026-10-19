@@ -8,6 +8,7 @@ I built this project around a small scene-description language. Instead of drawi
 
 - Interactive Scene Builder with shape selection, RGB color picking, and shape-specific properties
 - Add and remove shapes before rendering a scene
+- Live scene-code preview and save-to-file support
 - Open existing scene-definition files
 - Lexical analysis and syntax validation for scene files
 - Clear errors for malformed input, unexpected characters, and invalid RGB color values
@@ -91,7 +92,7 @@ dimensions     := "Height" integer "Width" integer
 
 1. Clone or download the repository.
 2. Import it into Eclipse as an existing Java project.
-3. Run `Main` to open Scene Studio. Pick a shape, tweak its details and color, then hit **Render scene**. Use **Load a .txt scene** to open one of the examples. Geometric shapes can be filled or outline-only, and circles have their own shape option.
+3. Run `Main` to open Scene Studio. Pick a shape, tweak its details and color, then hit **Render scene**. The **Scene code** tab previews the generated definition, and **Save scene as...** saves it as a reusable text file. Use **Load a .txt scene** to open one of the examples. Geometric shapes can be filled or outline-only; lines do not use a fill style.
 
 The project is configured to use `src/` for source files and `bin/` for compiled output. The file chooser starts in the project working directory, so choosing an example from `examples/` is the simplest way to try it.
 
