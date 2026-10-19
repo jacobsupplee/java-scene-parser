@@ -1,6 +1,7 @@
 // Java Scene Parser
 // Jacob Supplee
 // October 2026
+// Defines solid polygons
 
 import java.awt.*;
 
