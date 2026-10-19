@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -99,9 +100,14 @@ class SceneBuilder extends JFrame {
         objectPanel.setBorder(BorderFactory.createTitledBorder("Shapes in this scene"));
         objectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         objectPanel.add(new JScrollPane(objectList), BorderLayout.CENTER);
+        JPanel actions = new JPanel(new GridLayout(0, 1, 4, 4));
         JButton drawScene = new JButton("Draw scene");
         drawScene.addActionListener(event -> drawScene());
-        objectPanel.add(drawScene, BorderLayout.SOUTH);
+        actions.add(drawScene);
+        JButton openScene = new JButton("Open existing scene...");
+        openScene.addActionListener(event -> openExistingScene());
+        actions.add(openScene);
+        objectPanel.add(actions, BorderLayout.SOUTH);
         objectPanel.setPreferredSize(new java.awt.Dimension(260, 260));
         add(objectPanel, BorderLayout.EAST);
 
@@ -263,6 +269,24 @@ class SceneBuilder extends JFrame {
                     // The temporary file is safe to leave if cleanup fails.
                 }
             }
+        }
+    }
+
+    // Keeps the original file-based workflow available from the new launcher.
+    private void openExistingScene() {
+        JFileChooser chooser = new JFileChooser(new File("."));
+        int choice = chooser.showOpenDialog(this);
+        if (choice != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        try (Parser parser = new Parser(chooser.getSelectedFile())) {
+            Scene scene = parser.parseScene();
+            scene.draw();
+        } catch (SyntaxError | LexicalError error) {
+            showError(error.getMessage());
+        } catch (IOException error) {
+            showError("Could not read the selected scene: " + error.getMessage());
         }
     }
 
