@@ -1,16 +1,33 @@
-Scene EverythingDemo (900, 650)
-    Rectangle Color (167, 139, 250) at (40, 40) Height 100 Width 150 Filled;
-    Rectangle Color (45, 212, 191) at (210, 40) Height 100 Width 150 Outline;
-    RightTriangle Color (251, 146, 60) at (400, 40) Height 100 Width 120 Filled;
-    Isosceles Color (96, 165, 250) at (560, 40) Height 110 Width 130 Outline;
-    Parallelogram Color (244, 114, 182) at (40, 210) (190, 310) Offset 35 Filled;
-    RegularPolygon Color (250, 204, 21) at (300, 250) Sides 6 Radius 60 Filled;
-    Circle Color (52, 211, 153) at (470, 220) Radius 55 Filled;
-    Circle Color (248, 113, 113) at (600, 220) Radius 55 Outline;
-    Ellipse Color (129, 140, 248) at (700, 205) Width 150 Height 80 Filled;
-    Ellipse Color (34, 211, 238) at (700, 310) Width 150 Height 80 Outline;
-    Line Color (255, 255, 255) at (40, 390) to (240, 470);
-    RoundedRectangle Color (251, 146, 60) at (290, 390) Height 90 Width 170 Radius 18 Filled;
-    RoundedRectangle Color (45, 212, 191) at (500, 390) Height 90 Width 170 Radius 18 Outline;
-    Text Color (255, 255, 255) at (40, 540) "Scene Studio: every shape in one file";
+Scene EverythingDemo (960, 600)
+    Text Color (30, 41, 59) at (35, 42) "SHAPE ATLAS";
+    Text Color (100, 116, 139) at (35, 70) "A showcase of the Scene Studio drawing language";
+    Line Color (203, 213, 225) at (35, 88) to (925, 88);
+
+    Rectangle Color (124, 92, 246) at (45, 125) Height 95 Width 125 Filled;
+    RightTriangle Color (249, 115, 22) at (225, 125) Height 95 Width 125 Filled;
+    Isosceles Color (59, 130, 246) at (405, 125) Height 100 Width 125 Filled;
+    Parallelogram Color (236, 72, 153) at (585, 135) (710, 220) Offset 28 Filled;
+    RegularPolygon Color (234, 179, 8) at (790, 135) Sides 6 Radius 48 Filled;
+
+    Text Color (51, 65, 85) at (45, 250) "RECTANGLE";
+    Text Color (51, 65, 85) at (225, 250) "RIGHT TRIANGLE";
+    Text Color (51, 65, 85) at (405, 250) "ISOSCELES";
+    Text Color (51, 65, 85) at (585, 250) "PARALLELOGRAM";
+    Text Color (51, 65, 85) at (790, 250) "POLYGON";
+
+    Circle Color (16, 185, 129) at (65, 330) Radius 48 Filled;
+    Ellipse Color (99, 102, 241) at (220, 345) Width 135 Height 72 Filled;
+    Line Color (51, 65, 85) at (405, 375) to (535, 420);
+    RoundedRectangle Color (14, 165, 233) at (585, 340) Height 85 Width 135 Radius 20 Filled;
+    Text Color (30, 41, 59) at (765, 370) "Make";
+    Text Color (124, 92, 246) at (765, 400) "something";
+    Text Color (236, 72, 153) at (765, 430) "interesting.";
+
+    Text Color (51, 65, 85) at (65, 455) "CIRCLE";
+    Text Color (51, 65, 85) at (220, 455) "ELLIPSE";
+    Text Color (51, 65, 85) at (405, 455) "LINE";
+    Text Color (51, 65, 85) at (585, 455) "ROUNDED RECTANGLE";
+    Text Color (100, 116, 139) at (35, 540) "10 shape types  /  filled + outline styles  /  RGB color";
+    Line Color (203, 213, 225) at (35, 555) to (925, 555);
+    Text Color (100, 116, 139) at (35, 580) "SCENE STUDIO  •  DESIGN, DESCRIBE, RENDER";
 End.
