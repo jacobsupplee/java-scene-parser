@@ -47,6 +47,7 @@ class SceneBuilder extends JFrame {
     private final JTextField radius = new JTextField("60", 5);
     private final JComboBox<String> fillStyle = new JComboBox<>(new String[] {"Filled", "Outline"});
     private final JTextField textValue = new JTextField("Hello World", 12);
+    private final JPanel fields = new JPanel(new GridLayout(0, 4, 10, 10));
 
     private Color selectedColor = new Color(167, 139, 250);
     private final JButton colorButton = new JButton("Pick a color");
@@ -72,37 +73,15 @@ class SceneBuilder extends JFrame {
         sceneSettings.add(canvasHeight);
         add(sceneSettings, BorderLayout.NORTH);
 
-        JPanel fields = new JPanel(new GridLayout(0, 4, 10, 10));
         stylePanel(fields);
         fields.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(55, 65, 81)), BorderFactory.createEmptyBorder(14, 14, 14, 14)));
-        fields.add(new JLabel("SHAPE"));
-        fields.add(shapeChoice);
-        fields.add(new JLabel("COLOR"));
         colorButton.setBackground(selectedColor);
         colorButton.setOpaque(true);
         colorButton.setFocusPainted(false);
         colorButton.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
         colorButton.setForeground(Color.WHITE);
         colorButton.addActionListener(event -> chooseColor());
-        fields.add(colorButton);
-        addField(fields, "X", x);
-        addField(fields, "Y", y);
-        addField(fields, "Height", height);
-        addField(fields, "Width", width);
-        addField(fields, "Second point X", x2);
-        addField(fields, "Second point Y", y2);
-        addField(fields, "Offset", offset);
-        addField(fields, "Polygon sides", sides);
-        addField(fields, "Polygon radius", radius);
-        addField(fields, "Style", fillStyle);
-        addField(fields, "Text content", textValue);
-
-        JButton addShape = new JButton("+ Add shape");
-        addShape.addActionListener(event -> addShape());
-        fields.add(addShape);
-        JButton removeShape = new JButton("Remove selected");
-        removeShape.addActionListener(event -> removeSelectedShape());
-        fields.add(removeShape);
+        rebuildFields();
         add(fields, BorderLayout.CENTER);
 
         JPanel objectPanel = new JPanel(new BorderLayout(8, 8));
@@ -131,8 +110,7 @@ class SceneBuilder extends JFrame {
         help.setBorder(BorderFactory.createEmptyBorder(0, 10, 8, 10));
         add(help, BorderLayout.SOUTH);
 
-        shapeChoice.addActionListener(event -> updateFieldAvailability());
-        updateFieldAvailability();
+        shapeChoice.addActionListener(event -> rebuildFields());
         setSize(1080, 650);
         setMinimumSize(new java.awt.Dimension(900, 580));
         setLocationRelativeTo(null);
@@ -159,20 +137,52 @@ class SceneBuilder extends JFrame {
         }
     }
 
-    // Enables only the fields used by the currently selected shape.
-    private void updateFieldAvailability() {
+    // Rebuilds the property grid so only relevant options are visible.
+    private void rebuildFields() {
         String shape = (String) shapeChoice.getSelectedItem();
-        boolean dimensions = "Rectangle".equals(shape) || "RightTriangle".equals(shape)
-                || "Isosceles".equals(shape);
-        height.setEnabled(dimensions);
-        width.setEnabled(dimensions);
-        x2.setEnabled("Parallelogram".equals(shape));
-        y2.setEnabled("Parallelogram".equals(shape));
-        offset.setEnabled("Parallelogram".equals(shape));
-        sides.setEnabled("RegularPolygon".equals(shape));
-        radius.setEnabled("RegularPolygon".equals(shape) || "Circle".equals(shape));
-        fillStyle.setEnabled(!"Text".equals(shape));
-        textValue.setEnabled("Text".equals(shape));
+        fields.removeAll();
+        fields.add(new JLabel("SHAPE"));
+        fields.add(shapeChoice);
+        fields.add(new JLabel("COLOR"));
+        fields.add(colorButton);
+
+        addField(fields, "X", x);
+        addField(fields, "Y", y);
+
+        if ("Rectangle".equals(shape) || "RightTriangle".equals(shape) || "Isosceles".equals(shape)) {
+            addField(fields, "Height", height);
+            addField(fields, "Width", width);
+        }
+
+        if ("Parallelogram".equals(shape)) {
+            addField(fields, "Second point X", x2);
+            addField(fields, "Second point Y", y2);
+            addField(fields, "Offset", offset);
+        }
+
+        if ("RegularPolygon".equals(shape)) {
+            addField(fields, "Polygon sides", sides);
+            addField(fields, "Polygon radius", radius);
+        } else if ("Circle".equals(shape)) {
+            addField(fields, "Circle radius", radius);
+        }
+
+        if ("Text".equals(shape)) {
+            addField(fields, "Text content", textValue);
+        } else {
+            addField(fields, "Style", fillStyle);
+        }
+
+        JButton addShape = new JButton("+ Add shape");
+        addShape.addActionListener(event -> addShape());
+        fields.add(addShape);
+
+        JButton removeShape = new JButton("Remove selected");
+        removeShape.addActionListener(event -> removeSelectedShape());
+        fields.add(removeShape);
+
+        fields.revalidate();
+        fields.repaint();
     }
 
     // Validates the selected shape's numeric fields and stores its scene-language definition.
