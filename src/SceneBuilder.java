@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -52,7 +54,7 @@ class SceneBuilder extends JFrame {
     private final JTextField cornerRadius = new JTextField("18", 5);
     private final JComboBox<String> fillStyle = new JComboBox<>(new String[] {"Filled", "Outline"});
     private final JTextField textValue = new JTextField("Hello World", 12);
-    private final JPanel fields = new JPanel(new GridLayout(0, 4, 10, 10));
+    private final JPanel fields = new JPanel(new GridLayout(0, 2, 10, 8));
 
     private Color selectedColor = new Color(167, 139, 250);
     private final JButton colorButton = new JButton("Pick a color");
@@ -60,6 +62,8 @@ class SceneBuilder extends JFrame {
     private final JList<String> objectList = new JList<>(objectListModel);
     private final JTextArea scenePreview = new JTextArea();
     private final ArrayList<String> sceneObjects = new ArrayList<>();
+    private int editingIndex = -1;
+    private JButton addShapeButton;
 
     public SceneBuilder() {
         super("Scene Studio");
@@ -205,9 +209,13 @@ class SceneBuilder extends JFrame {
             addField(fields, "Style", fillStyle);
         }
 
-        JButton addShape = new JButton("+ Add shape");
-        addShape.addActionListener(event -> addShape());
-        fields.add(addShape);
+        addShapeButton = new JButton(editingIndex >= 0 ? "Update selected" : "+ Add shape");
+        addShapeButton.addActionListener(event -> addShape());
+        fields.add(addShapeButton);
+
+        JButton editShape = new JButton("Edit selected");
+        editShape.addActionListener(event -> editSelectedShape());
+        fields.add(editShape);
 
         JButton removeShape = new JButton("Remove selected");
         removeShape.addActionListener(event -> removeSelectedShape());
@@ -281,13 +289,103 @@ class SceneBuilder extends JFrame {
                 definition = definition.substring(0, definition.length() - 1) + " " + style + ";";
                 summary += " - " + style.toLowerCase();
             }
-            sceneObjects.add(definition);
-            objectListModel.addElement(summary);
+            if (editingIndex >= 0) {
+                sceneObjects.set(editingIndex, definition);
+                objectListModel.setElementAt(summary, editingIndex);
+                objectList.setSelectedIndex(editingIndex);
+                editingIndex = -1;
+                addShapeButton.setText("+ Add shape");
+            } else {
+                sceneObjects.add(definition);
+                objectListModel.addElement(summary);
+            }
             refreshSceneCode();
         } catch (NumberFormatException error) {
             showError("Use whole numbers for the shape details.");
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());
+        }
+    }
+
+    // Loads a selected shape's saved definition back into the form for editing.
+    private void editSelectedShape() {
+        int selected = objectList.getSelectedIndex();
+        if (selected < 0) {
+            showError("Select a shape from the Objects tab first.");
+            return;
+        }
+
+        String definition = sceneObjects.get(selected);
+        String shape = definition.substring(0, definition.indexOf(' '));
+        Matcher base = Pattern.compile("Color \\(\\((\\d+), (\\d+), (\\d+)\\)\\) at \\(\\((-?\\d+), (-?\\d+)\\)\\)").matcher(definition);
+        if (!base.find()) {
+            showError("I couldn’t load that shape into the editor.");
+            return;
+        }
+
+        try {
+            int red = Integer.parseInt(base.group(1));
+            int green = Integer.parseInt(base.group(2));
+            int blue = Integer.parseInt(base.group(3));
+            x.setText(base.group(4));
+            y.setText(base.group(5));
+            selectedColor = new Color(red, green, blue);
+            colorButton.setBackground(selectedColor);
+            colorButton.setForeground(red + green + blue < 380 ? Color.WHITE : Color.BLACK);
+            shapeChoice.setSelectedItem(shape);
+
+            if (definition.endsWith(" Outline;")) {
+                fillStyle.setSelectedItem("Outline");
+            } else {
+                fillStyle.setSelectedItem("Filled");
+            }
+
+            Matcher dimensions = Pattern.compile("Height (-?\\d+) Width (-?\\d+)").matcher(definition);
+            if (dimensions.find()) {
+                height.setText(dimensions.group(1));
+                width.setText(dimensions.group(2));
+            }
+            Matcher point = Pattern.compile("\\) \\((-?\\d+), (-?\\d+)\\)").matcher(definition);
+            if ("Parallelogram".equals(shape) && point.find()) {
+                x2.setText(point.group(1));
+                y2.setText(point.group(2));
+            }
+            Matcher lineEnd = Pattern.compile(" to \\((-?\\d+), (-?\\d+)\\)").matcher(definition);
+            if ("Line".equals(shape) && lineEnd.find()) {
+                x2.setText(lineEnd.group(1));
+                y2.setText(lineEnd.group(2));
+            }
+            Matcher number = Pattern.compile("Radius (-?\\d+)").matcher(definition);
+            if (number.find()) {
+                if ("RoundedRectangle".equals(shape)) {
+                    cornerRadius.setText(number.group(1));
+                } else {
+                    radius.setText(number.group(1));
+                }
+            }
+            Matcher polygon = Pattern.compile("Sides (-?\\d+) Radius (-?\\d+)").matcher(definition);
+            if (polygon.find()) {
+                sides.setText(polygon.group(1));
+                radius.setText(polygon.group(2));
+            }
+            Matcher ellipse = Pattern.compile("Width (-?\\d+) Height (-?\\d+)").matcher(definition);
+            if ("Ellipse".equals(shape) && ellipse.find()) {
+                width.setText(ellipse.group(1));
+                height.setText(ellipse.group(2));
+            }
+            if ("Text".equals(shape)) {
+                Matcher text = Pattern.compile("\\\"(.*)\\\";").matcher(definition);
+                if (text.find()) {
+                    textValue.setText(text.group(1).replace("\\\\" , "\\").replace("\\\" , "\\""));
+                }
+            }
+
+            editingIndex = selected;
+            addShapeButton.setText("Update selected");
+            fields.revalidate();
+            fields.repaint();
+        } catch (IllegalArgumentException error) {
+            showError("I couldn’t load that shape into the editor.");
         }
     }
 
