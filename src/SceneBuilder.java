@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
@@ -66,6 +68,21 @@ class SceneBuilder extends JFrame {
     private final ArrayList<String> sceneObjects = new ArrayList<>();
     private int editingIndex = -1;
     private JButton addShapeButton;
+    private JButton undoButton;
+    private JButton redoButton;
+    private final Deque<SceneSnapshot> undoHistory = new ArrayDeque<>();
+    private final Deque<SceneSnapshot> redoHistory = new ArrayDeque<>();
+
+    // Stores the scene's object definitions and display labels at one point in time.
+    private static class SceneSnapshot {
+        private final ArrayList<String> definitions;
+        private final ArrayList<String> labels;
+
+        private SceneSnapshot(ArrayList<String> definitions, ArrayList<String> labels) {
+            this.definitions = definitions;
+            this.labels = labels;
+        }
+    }
 
     public SceneBuilder() {
         super("Scene Studio");
@@ -113,6 +130,16 @@ class SceneBuilder extends JFrame {
         tabs.addTab("Scene code", new JScrollPane(scenePreview));
         objectPanel.add(tabs, BorderLayout.CENTER);
         JPanel actions = new JPanel(new GridLayout(0, 1, 4, 4));
+        JPanel historyActions = new JPanel(new GridLayout(1, 2, 4, 4));
+        stylePanel(historyActions);
+        undoButton = new JButton("Undo");
+        undoButton.addActionListener(event -> undo());
+        redoButton = new JButton("Redo");
+        redoButton.addActionListener(event -> redo());
+        historyActions.add(undoButton);
+        historyActions.add(redoButton);
+        actions.add(historyActions);
+
         JButton editShape = new JButton("Edit selected");
         editShape.addActionListener(event -> editSelectedShape());
         actions.add(editShape);
@@ -139,6 +166,7 @@ class SceneBuilder extends JFrame {
         addPreviewListener(canvasWidth);
         addPreviewListener(canvasHeight);
         refreshSceneCode();
+        updateHistoryButtons();
         setSize(1080, 650);
         setMinimumSize(new java.awt.Dimension(900, 580));
         setLocationRelativeTo(null);
@@ -328,6 +356,7 @@ class SceneBuilder extends JFrame {
                 definition = definition.substring(0, definition.length() - 1) + " " + style + ";";
                 summary += " - " + style.toLowerCase();
             }
+            saveUndoSnapshot();
             if (editingIndex >= 0) {
                 sceneObjects.set(editingIndex, definition);
                 objectListModel.setElementAt(summary, editingIndex);
@@ -448,9 +477,65 @@ class SceneBuilder extends JFrame {
     private void removeSelectedShape() {
         int selected = objectList.getSelectedIndex();
         if (selected >= 0) {
+            saveUndoSnapshot();
             objectListModel.remove(selected);
             sceneObjects.remove(selected);
             refreshSceneCode();
+        }
+    }
+
+    // Saves the current object list before a change so it can be undone.
+    private void saveUndoSnapshot() {
+        ArrayList<String> labels = new ArrayList<>();
+        for (int i = 0; i < objectListModel.size(); i++) {
+            labels.add(objectListModel.getElementAt(i));
+        }
+        undoHistory.push(new SceneSnapshot(new ArrayList<>(sceneObjects), labels));
+        redoHistory.clear();
+        updateHistoryButtons();
+    }
+
+    // Restores an earlier or later version of the scene object list.
+    private void restoreSnapshot(SceneSnapshot snapshot) {
+        sceneObjects.clear();
+        sceneObjects.addAll(snapshot.definitions);
+        objectListModel.clear();
+        for (String label : snapshot.labels) {
+            objectListModel.addElement(label);
+        }
+        editingIndex = -1;
+        objectList.clearSelection();
+        addShapeButton.setText("+ Add shape");
+        refreshSceneCode();
+        updateHistoryButtons();
+    }
+
+    private SceneSnapshot currentSnapshot() {
+        ArrayList<String> labels = new ArrayList<>();
+        for (int i = 0; i < objectListModel.size(); i++) {
+            labels.add(objectListModel.getElementAt(i));
+        }
+        return new SceneSnapshot(new ArrayList<>(sceneObjects), labels);
+    }
+
+    private void undo() {
+        if (!undoHistory.isEmpty()) {
+            redoHistory.push(currentSnapshot());
+            restoreSnapshot(undoHistory.pop());
+        }
+    }
+
+    private void redo() {
+        if (!redoHistory.isEmpty()) {
+            undoHistory.push(currentSnapshot());
+            restoreSnapshot(redoHistory.pop());
+        }
+    }
+
+    private void updateHistoryButtons() {
+        if (undoButton != null) {
+            undoButton.setEnabled(!undoHistory.isEmpty());
+            redoButton.setEnabled(!redoHistory.isEmpty());
         }
     }
 
