@@ -1,7 +1,6 @@
-// CMSC 330 Advanced Programming Languages
-// Project 1 Skeleton
-// UMGC CITE
-// August 2021
+// Java Scene Parser
+// Jacob Supplee
+// October 2026
 
 // Class that defines a lexical error
 
