@@ -70,16 +70,16 @@ scene          := "Scene" identifier number-list image-list "End" "."
 number-list    := "(" integer ("," integer)* ")"
 image-list     := (rectangle | right-triangle | isosceles | parallelogram
                    | regular-polygon | circle | ellipse | line | rounded-rectangle | text-image)*
-rectangle      := "Rectangle" color at-point dimensions ";"
-right-triangle := "RightTriangle" color at-point dimensions ";"
-isosceles      := "Isosceles" color at-point dimensions ";"
-parallelogram  := "Parallelogram" color point point "Offset" integer ";"
+rectangle      := "Rectangle" color at-point dimensions style? ";"
+right-triangle := "RightTriangle" color at-point dimensions style? ";"
+isosceles      := "Isosceles" color at-point dimensions style? ";"
+parallelogram  := "Parallelogram" point point "Offset" integer style? ";"
 regular-polygon:= "RegularPolygon" color at-point "Sides" integer
-                   "Radius" integer ";"
-circle         := "Circle" color at-point "Radius" integer style ";"
-ellipse        := "Ellipse" color at-point "Width" integer "Height" integer style ";"
+                   "Radius" integer style? ";"
+circle         := "Circle" color at-point "Radius" integer style? ";"
+ellipse        := "Ellipse" color at-point "Width" integer "Height" integer style? ";"
 line           := "Line" color at-point "to" point ";"
-rounded-rectangle := "RoundedRectangle" color at-point dimensions "Radius" integer style ";"
+rounded-rectangle := "RoundedRectangle" color at-point dimensions "Radius" integer style? ";"
 text-image     := "Text" color at-point quoted-string ";"
 style          := "Filled" | "Outline"
 color          := "Color" "(" integer "," integer "," integer ")"
@@ -108,4 +108,4 @@ java -cp bin ParserTests
 
 The tests run without opening a Swing window. They check the valid examples, confirm that invalid fixtures are rejected, and exercise malformed input such as missing punctuation, invalid numbers, unexpected characters, invalid RGB values, missing shape properties, and trailing input.
 
-Latest local run: **18 passed, 0 failed**.
+Run the test suite after pulling updates to verify all examples and invalid fixtures against your local Java environment.
