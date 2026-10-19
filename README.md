@@ -35,6 +35,7 @@ This project started as a UMGC CMSC 330 academic parser project and was extended
 - `examples/` — valid scene files, including `everything_demo.txt` which demonstrates every supported shape
 - `tests/invalid/` — malformed scene files that should be rejected
 - `src/ParserTests.java` — regression test runner for valid and invalid scenes
+- `screenshots/` — screenshots of the application, demo scene, and generated scene code
 
 ## Getting Started
 
@@ -125,7 +126,7 @@ dimensions        := "Height" integer "Width" integer
 
 ## Example Scenes
 
-- `examples/everything_demo.txt` — one scene demonstrating all supported shape types, including filled and outline examples
+- `examples/everything_demo.txt` — one scene demonstrating all supported shape types
 - `examples/extended_shapes.txt` — ellipse, line, and rounded rectangle examples
 - Other files in `examples/` demonstrate individual shapes and composed scenes
 
@@ -133,7 +134,23 @@ To try the complete demo, run Scene Studio and choose **Load a .txt scene**, the
 
 ## Screenshots
 
-Screenshots of the finished Scene Studio interface and the all-shapes demo will be added here.
+### Scene Studio
+
+The main interface for choosing shapes, editing their properties, managing objects, and rendering a scene.
+
+![Scene Studio interface](screenshots/scene-studio.png)
+
+### Shape Atlas demo
+
+A rendered example showcasing the supported shape types with a coordinated palette and labels.
+
+![Shape Atlas demo](screenshots/everything-demo.png)
+
+### Scene code preview
+
+The source view showing the Java scene implementation and code formatting.
+
+![Scene code preview](screenshots/scene-code-preview.png)
 
 ## Notes
 
