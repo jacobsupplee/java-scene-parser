@@ -1,5 +1,4 @@
-// CMSC 330 Advanced Programming Languages
-// Parser test cases
+// Java Scene Parser
 // Jacob Supplee
 // October 2026
 
@@ -25,6 +24,7 @@ class ParserTests {
         testMissingPeriod();
         testInvalidNumber();
         testMissingSemicolon();
+        testUnexpectedCharacter();
 
         System.out.println();
         System.out.println("Test results: " + passed + " passed, " + failed + " failed.");
@@ -87,6 +87,25 @@ class ParserTests {
                 + "End.\n";
 
         expectSyntaxError("missing semicolon", input);
+    }
+
+    // Tests that an unexpected character produces a lexical error
+    private static void testUnexpectedCharacter() throws Exception {
+        String input = "Scene TestScene (300, 300)\n@";
+
+        File file = createInputFile(input);
+        try {
+            try (Parser parser = new Parser(file)) {
+                parser.parseScene();
+                fail("unexpected character", "Unexpected character was accepted");
+            } catch (LexicalError error) {
+                pass("unexpected character rejected");
+            } catch (SyntaxError error) {
+                fail("unexpected character", "Expected a lexical error: " + error.getMessage());
+            }
+        } finally {
+            Files.deleteIfExists(file.toPath());
+        }
     }
 
     // Checks that malformed input produces a syntax error
