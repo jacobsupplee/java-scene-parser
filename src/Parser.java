@@ -106,6 +106,11 @@ class Parser implements AutoCloseable {
             radius = lexer.getNumber();
             RegularPolygon polygon = new RegularPolygon(color, sides, point, radius); //Constructor
             scene.addImage(polygon); //Adds polygon to scene      
+        } else if (imageToken == Token.CIRCLE) {
+            verifyNextToken(Token.RADIUS);
+            verifyNextToken(Token.NUMBER);
+            radius = lexer.getNumber();
+            scene.addImage(new Circle(color, point, radius, true));
         } else if (imageToken == Token.TEXT) { //Added TEXT parser
             verifyNextToken(Token.STRING); //Parses text
             String textString = lexer.getLexeme();
@@ -114,7 +119,14 @@ class Parser implements AutoCloseable {
         } else {
              throw new SyntaxError(lexer.getLineNo(), "Unexpected image name " + imageToken);
         }
-        verifyNextToken(Token.SEMICOLON);
+        token = lexer.getNextToken();
+        if (token == Token.FILLED || token == Token.OUTLINE) {
+            boolean filled = token == Token.FILLED;
+            // Apply the style to the shape just added to the scene.
+            scene.setLastImageFilled(filled);
+            token = lexer.getNextToken();
+        }
+        verifyCurrentToken(Token.SEMICOLON);
         token = lexer.getNextToken();
         if (token != Token.END)
             parseImages(scene, token);
