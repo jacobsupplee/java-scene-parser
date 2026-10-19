@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -54,7 +55,8 @@ class SceneBuilder extends JFrame {
     private final JTextField cornerRadius = new JTextField("18", 5);
     private final JComboBox<String> fillStyle = new JComboBox<>(new String[] {"Filled", "Outline"});
     private final JTextField textValue = new JTextField("Hello World", 12);
-    private final JPanel fields = new JPanel();
+    private final JPanel fields = new JPanel(new java.awt.GridBagLayout());
+    private int fieldRow = 0;
 
     private Color selectedColor = new Color(167, 139, 250);
     private final JButton colorButton = new JButton("Pick a color");
@@ -84,7 +86,6 @@ class SceneBuilder extends JFrame {
         add(sceneSettings, BorderLayout.NORTH);
 
         stylePanel(fields);
-        fields.setLayout(new javax.swing.BoxLayout(fields, javax.swing.BoxLayout.Y_AXIS));
         fields.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(55, 65, 81)), BorderFactory.createEmptyBorder(14, 14, 14, 14)));
         colorButton.setBackground(selectedColor);
         colorButton.setOpaque(true);
@@ -149,21 +150,34 @@ class SceneBuilder extends JFrame {
 
     // Adds text fields and selectors to the property grid.
     private void addField(JPanel panel, String label, java.awt.Component field) {
-        JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 5));
-        row.setBackground(new Color(31, 41, 55));
+        GridBagConstraints labelConstraints = new GridBagConstraints();
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = fieldRow;
+        labelConstraints.weightx = 0;
+        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        labelConstraints.anchor = GridBagConstraints.WEST;
+        labelConstraints.insets = new java.awt.Insets(5, 8, 5, 14);
+
         JLabel fieldLabel = new JLabel(label);
-        fieldLabel.setPreferredSize(new java.awt.Dimension(125, 26));
+        fieldLabel.setPreferredSize(new java.awt.Dimension(135, 30));
+        panel.add(fieldLabel, labelConstraints);
+
+        GridBagConstraints fieldConstraints = new GridBagConstraints();
+        fieldConstraints.gridx = 1;
+        fieldConstraints.gridy = fieldRow++;
+        fieldConstraints.weightx = 1;
+        fieldConstraints.fill = GridBagConstraints.HORIZONTAL;
+        fieldConstraints.anchor = GridBagConstraints.WEST;
+        fieldConstraints.insets = new java.awt.Insets(5, 0, 5, 8);
+
         if (field instanceof JTextField) {
-            field.setPreferredSize(new java.awt.Dimension(180, 30));
+            field.setPreferredSize(new java.awt.Dimension(220, 30));
         } else if (field instanceof JComboBox<?>) {
-            field.setPreferredSize(new java.awt.Dimension(180, 32));
+            field.setPreferredSize(new java.awt.Dimension(220, 32));
         } else if (field == colorButton) {
-            field.setPreferredSize(new java.awt.Dimension(220, 42));
+            field.setPreferredSize(new java.awt.Dimension(260, 42));
         }
-        row.add(fieldLabel);
-        row.add(field);
-        row.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
-        panel.add(row);
+        panel.add(field, fieldConstraints);
     }
 
     // Opens Swing's built-in color picker.
@@ -181,6 +195,7 @@ class SceneBuilder extends JFrame {
     private void rebuildFields() {
         String shape = (String) shapeChoice.getSelectedItem();
         fields.removeAll();
+        fieldRow = 0;
         addField(fields, "SHAPE", shapeChoice);
         addField(fields, "COLOR", colorButton);
 
@@ -235,8 +250,15 @@ class SceneBuilder extends JFrame {
         removeShape.setPreferredSize(new java.awt.Dimension(150, 34));
         removeShape.addActionListener(event -> removeSelectedShape());
         buttonRow.add(removeShape);
-        buttonRow.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
-        fields.add(buttonRow);
+        GridBagConstraints buttonConstraints = new GridBagConstraints();
+        buttonConstraints.gridx = 0;
+        buttonConstraints.gridy = fieldRow++;
+        buttonConstraints.gridwidth = 2;
+        buttonConstraints.weightx = 1;
+        buttonConstraints.fill = GridBagConstraints.HORIZONTAL;
+        buttonConstraints.anchor = GridBagConstraints.WEST;
+        buttonConstraints.insets = new java.awt.Insets(16, 8, 8, 8);
+        fields.add(buttonRow, buttonConstraints);
 
         fields.revalidate();
         fields.repaint();
