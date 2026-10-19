@@ -1,0 +1,6 @@
+Scene CircleStyles (500, 400)
+    Circle Color (167, 139, 250) at (100, 100) Radius 50 Filled;
+    Circle Color (45, 212, 191) at (230, 100) Radius 50 Outline;
+    Rectangle Color (251, 146, 60) at (300, 200) Height 80 Width 120 Filled;
+    Rectangle Color (96, 165, 250) at (50, 200) Height 80 Width 120 Outline;
+End.
