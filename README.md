@@ -81,7 +81,7 @@ dimensions     := "Height" integer "Width" integer
 
 1. Clone or download the repository.
 2. Import it into Eclipse as an existing Java project.
-3. Run `Main` and select a scene file from the `examples/` directory.
+3. Run `Main` to open Scene Studio. Pick a shape, tweak its details and color, then hit **Render scene**. Use **Load a .txt scene** to open one of the examples.
 
 The project is configured to use `src/` for source files and `bin/` for compiled output. The file chooser starts in the project working directory, so choosing an example from `examples/` is the simplest way to try it.
 
