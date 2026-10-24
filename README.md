@@ -2,7 +2,7 @@
 
 A Java Swing application for creating geometric scenes with a graphical builder or a small text-based scene language. The lexer and parser validate each scene definition, then construct the corresponding Java drawing objects.
 
-This project started as a UMGC CMSC 330 academic parser project and was extended with a graphical scene editor, additional drawing primitives, file support, and regression tests.
+This project started as a UMGC CMSC 330 academic parser project and was extensively improved with a graphical scene editor, additional drawing primitives, file support, and regression tests.
 
 ## Features
 
@@ -130,27 +130,7 @@ dimensions        := "Height" integer "Width" integer
 - `examples/extended_shapes.txt` — ellipse, line, and rounded rectangle examples
 - Other files in `examples/` demonstrate individual shapes and composed scenes
 
-To try the complete demo, run Scene Studio and choose **Load a .txt scene**, then open `examples/everything_demo.txt`.
-
-## Screenshots
-
-### Scene Studio
-
-The main interface for choosing shapes, editing their properties, managing objects, and rendering a scene.
-
-![Scene Studio interface](screenshots/scene-studio.png)
-
-### Shape Atlas demo
-
-A rendered example showcasing the supported shape types with a coordinated palette and labels.
-
-![Shape Atlas demo](screenshots/everything-demo.png)
-
-### Scene code preview
-
-The source view showing the Java scene implementation and code formatting.
-
-![Scene code preview](screenshots/scene-code-preview.png)
+To try the complete demo, run Scene Studio and choose "Load a .txt scene", then open `examples/everything_demo.txt`.
 
 ## Notes
 
